@@ -1,0 +1,19 @@
+{
+  "name": "san_app_backend",
+  "version": "1.0.0",
+  "description": "Backend with RESTfull API for SAN web application",
+  "main": "index.js",
+  "dependencies": {
+    "express": "^4.14.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:carlique/San_app.git"
+  },
+  "author": "Karel Tušek",
+  "license": "ISC"
+}
