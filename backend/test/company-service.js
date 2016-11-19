@@ -30,11 +30,13 @@ describe('companyService', () => {
   describe('/GET company', () => {
     it('it should GET all the companies', (done) => {
       chai.request(server)
-          .get('/company')
+          .get('/companies')
           .end((err, res) => {
               res.should.have.status(200);
-              res.body.should.be.a('array');
-              res.body.length.should.be.eql(0);
+              res.body.should.be.a('object');
+              res.body.should.have.property('data').a('array');
+              res.body.should.have.property('data').a('array').with.lengthOf(0);
+              res.body.should.have.property('message').eql('Returned 0 records.');
             done();
           });
     });
@@ -50,13 +52,12 @@ describe('companyService', () => {
         ico: "1234567",
       }
       chai.request(server)
-        .post('/company')
+        .post('/companies')
         .send(company)
         .end((err, res) => {
             res.should.have.status(422);
-            res.body.should.be.a('array');
-//              res.body.should.have.deep.property('path').containEql('name');
-//              res.body.should.have.deep.property('message').containEql('notEmpty');
+            res.body.should.be.a('object');
+            res.body.should.have.property('message').eql('Validation error');
           done();
         });
       });
@@ -66,13 +67,13 @@ describe('companyService', () => {
           ico: "1234567",
         }
         chai.request(server)
-          .post('/company')
+          .post('/companies')
           .send(company)
           .end((err, res) => {
               res.should.have.status(200);
               res.body.should.be.a('object');
-              res.body.should.have.property('name');
-              res.body.should.have.property('ico');
+              res.body.should.have.property('data').with.deep.property('name').eql('test');
+              res.body.should.have.property('data').with.deep.property('ico').eql('1234567');
             done();
           });
       });
@@ -87,14 +88,14 @@ describe('companyService', () => {
       .save()
       .then((company) => {
         chai.request(server)
-        .get('/company/' + company.id)
+        .get('/companies/' + company.id)
         .send(company)
         .end((err, res) => {
             res.should.have.status(200);
             res.body.should.be.a('object');
-            res.body.should.have.property('name');
-            res.body.should.have.property('ico');
-            res.body.should.have.property('id').eql(company.id);
+            res.body.should.have.property('data').with.deep.property('name').eql('test');
+            res.body.should.have.property('data').with.deep.property('ico').eql('1234567');
+            res.body.should.have.property('message').eql('Returned company with id: ' + company.id);
           done();
         });
       });
@@ -110,12 +111,13 @@ describe('companyService', () => {
       .save()
       .then((company) => {
         chai.request(server)
-        .put('/company/' + company.id)
+        .put('/companies/' + company.id)
         .send({ name: "test2", ico: "7654321", })
         .end((err, res) => {
             res.should.have.status(200);
             res.body.should.be.a('object');
-            res.body.should.have.property('ico').eql('7654321');
+            res.body.should.have.property('data').with.deep.property('ico').eql('7654321');
+            res.body.should.have.property('message').eql('Company updated with id: ' + company.id);
           done();
         });
       });
@@ -127,16 +129,15 @@ describe('companyService', () => {
    */
   describe('/DELETE/:id company', () => {
       it('it should DELETE a company given the id', (done) => {
-        let book = new Book({title: "The Chronicles of Narnia", author: "C.S. Lewis", year: 1948, pages: 778})
-        book.save((err, book) => {
+        Company.build({ name: "test2", ico: "1234567" })
+        .save()
+        .then((company) => {
                 chai.request(server)
-                .delete('/book/' + book.id)
+                .delete('/companies/' + company.id)
                 .end((err, res) => {
                     res.should.have.status(200);
                     res.body.should.be.a('object');
-                    res.body.should.have.property('message').eql('Book successfully deleted!');
-                    res.body.result.should.have.property('ok').eql(1);
-                    res.body.result.should.have.property('n').eql(1);
+                    res.body.should.have.property('message').eql('Company deleted with id: ' + company.id);
                   done();
                 });
           });
