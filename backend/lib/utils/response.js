@@ -5,29 +5,24 @@ const FAIL = "fail";
 const ERROR = "error";
 
 module.exports = {
-  success: function (data, msg) {
-    var response = {
-      status: SUCCESS,
-      data: data,
-      message: msg
-    }
-    return response;
+  success: function (data, msg, info) {
+    return res(SUCCESS, data, msg, info);
   },
-  fail: function (data, msg) {
-    var response = {
-      status: FAIL,
-      data: data,
-      message: msg
-    }
-    return response;
+  fail: function (data, msg, info) {
+    return res(FAIL, data, msg, info);
   },
 
-  error: function (data, msg) {
-    var response = {
-      status: ERROR,
-      data: data,
-      message: msg
-    }
-    return response;
+  error: function (data, msg, info) {
+    return res(ERROR, data, msg, info);
   }
+}
+
+function res (status, data, msg, info) {
+  var response = {
+    "status": status,
+    "data": data,
+    "message": msg,
+    "more info": info
+  }
+  return response;
 }
