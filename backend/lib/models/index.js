@@ -1,14 +1,15 @@
 var Sequelize = require('sequelize');
-var dbconfig    = require('config').database;  // we use node-config to handle environments
+var dbconfig  = require('config').database;  // we use node-config to handle environments
 
 // initialize database connection
 var sequelize = new Sequelize(
   dbconfig.name,
   dbconfig.username,
   dbconfig.password,
-  { 
+  {
     dialect: dbconfig.dialect,
-    storage: dbconfig.storage
+    storage: dbconfig.storage,
+    logging:log.debug.bind(log)
   }
 );
 

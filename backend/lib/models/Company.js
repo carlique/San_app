@@ -2,7 +2,13 @@
 
 module.exports = function(sequelize, DataTypes) {
   return sequelize.define('Company', {
-    name: DataTypes.STRING,
+    name: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notEmpty: true
+      }
+    },
     ico: DataTypes.STRING
   }, {
 

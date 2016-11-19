@@ -7,12 +7,12 @@ var config = require('config');
 
 const debug   = require('debug')('san_app:server');
 const error = require('debug')('san_app:error');
-//const usersModel = require('./users-sequelize');
 
 var Logger = require('./lib/utils/logger');
 var logger = new Logger();
 
-var port = process.env.PORT || config.port;
+var port = process.env.PORT || config.port || 3000;
+var url = process.env.URL || config.url || 'localhost';
 
 var server = restify.createServer({
   name: 'SAN_app' || config.name,
@@ -28,8 +28,6 @@ server.use(restify.queryParser());
 server.use(restify.bodyParser({
   mapParams: true
 }));
-
-server.models =  require('./lib/models');
 
 require('./routes')(server);
 
@@ -52,6 +50,8 @@ server.on('after', function(req, res, route, err) {
   auditer(req, res, route, err);
 });
 
-server.listen(port, process.env.REST_LISTEN ? process.env.REST_LISTEN : "localhost", function() {
+server.listen(port, process.env.REST_LISTEN ? process.env.REST_LISTEN : url, function() {
   log.info(server.name +' listening at '+ server.url);
 });
+
+module.exports = server;
