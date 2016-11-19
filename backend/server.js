@@ -29,7 +29,7 @@ server.use(restify.bodyParser({
   mapParams: true
 }));
 
-require('./routes')(server);
+require('./routes/index')(server);
 
 server.on('uncaughtException', function(req, res, route, err) {
   var auditer = restify.auditLogger({log:log});
