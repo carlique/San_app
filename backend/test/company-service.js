@@ -70,7 +70,8 @@ describe('companyService', () => {
           .post('/companies')
           .send(company)
           .end((err, res) => {
-              res.should.have.status(200);
+              res.should.have.status(201);
+              res.should.have.header('Location','/companies/1');
               res.body.should.be.a('object');
               res.body.should.have.property('data').with.deep.property('name').eql('test');
               res.body.should.have.property('data').with.deep.property('ico').eql('1234567');

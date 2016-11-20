@@ -49,7 +49,8 @@ CompanyService.prototype.create = function (req, res, next) {
   )
   .then(company => {
     log.info('CompanyService.created with Id: '+ company.id);
-    res.send(200, Response.success(company, "Company creted with id: " + company.id));
+    res.header('Location', '/companies/' + company.id);
+    res.send(201, Response.success(company, "Company creted with id: " + company.id));
     next(false);
   })
   .catch(Sequelize.ValidationError, function (err) {
