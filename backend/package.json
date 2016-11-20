@@ -4,8 +4,9 @@
   "private": true,
   "scripts": {
     "migrate": "sequelize db:migrate",
-    "start": "node ./server",
-    "test": "mocha --timeout 10000"
+    "start":    "node ./server",
+    "test":     "mocha --timeout 10000",
+    "dredd":    "dredd"
   },
   "dependencies": {
     "body-parser": "~1.15.2",
