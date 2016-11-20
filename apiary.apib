@@ -5,7 +5,9 @@ HOST: http://polls.apiblueprint.org/
 
 Polls is a simple API allowing consumers to view polls and vote in them.
 
-## Companies resource [/companies]
+# Group Companies
+
+## All Companies [/companies{limit}]
 
 ### List All Companies [GET]
 
@@ -65,3 +67,32 @@ object containing a company.
                         ],
                 "message": "Company creted with id: 2"
             }
+
+### Single Company [/companies/{id}]
+
++ Parameters
+    + id (number)
+
+        The ID of the desired company.
+        
+### Get a Single Company [GET]
+
+Get a single company information using this action. 
+
++ Request (application/json)
+
++ Response 200 (application/json)
+
+        {
+            "status": "success",
+            "data": [
+                        {
+                        "id": 2,
+                        "name": "Some company ltd.",
+                        "ico": "12345678",
+                        "createdAt": null,
+                        "updatedAt": null
+                        }
+                    ],
+            "message": "Company creted with id: 2"
+        }
