@@ -32,48 +32,36 @@ Polls is a simple API allowing consumers to view polls and vote in them.
             "message": "Returned 1 records."
         }
 
-### Create a New Question [POST]
+### Create a New Company [POST]
 
-You may create your own question using this action. It takes a JSON
-object containing a question and a collection of answers in the
-form of choices.
+You may create a new company using this action. It takes a JSON
+object containing a company.
 
 + Request (application/json)
 
         {
-            "question": "Favourite programming language?",
-            "choices": [
-                "Swift",
-                "Python",
-                "Objective-C",
-                "Ruby"
-            ]
+            "name": "Some company ltd.",
+            "ico": "12345678"
         }
 
 + Response 201 (application/json)
 
     + Headers
 
-            Location: /questions/2
+            Location: /company/2
 
     + Body
 
             {
-                "question": "Favourite programming language?",
-                "published_at": "2015-08-05T08:40:51.620Z",
-                "choices": [
-                    {
-                        "choice": "Swift",
-                        "votes": 0
-                    }, {
-                        "choice": "Python",
-                        "votes": 0
-                    }, {
-                        "choice": "Objective-C",
-                        "votes": 0
-                    }, {
-                        "choice": "Ruby",
-                        "votes": 0
-                    }
-                ]
+                "status": "success",
+                "data": [
+                            {
+                            "id": 2,
+                            "name": "Some company ltd.",
+                            "ico": "12345678",
+                            "createdAt": null,
+                            "updatedAt": null
+                            }
+                        ],
+                "message": "Company creted with id: 2"
             }
