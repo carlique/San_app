@@ -45,8 +45,28 @@ CompanyService.prototype.getById = function (req, res, next) {
 CompanyService.prototype.create = function (req, res, next) {
   Company.create({
     name: req.params.name,
-    ico: req.params.ico}
-  )
+    street: req.params.street,
+    city: req.params.city,
+    post: req.params.post,
+    country: req.params.country,
+    streetInvoice: req.params.streetInvoice,
+    cityInvoice: req.params.cityInvoice,
+    postInvoice: req.params.postInvoice,
+    countryInvoice: req.params.countryInvoice,
+    customer: req.params.customer,
+    provider: req.params.provider,
+    bank: req.params.bank,
+    account: req.params.account,
+    iban: req.params.iban,
+    idNumber: req.params.idNumber,
+    vatNumber: req.params.vatNumber,
+    email: req.params.email,
+    www: req.params.www,
+    phoneNumber: req.params.phoneNumber,
+    phoneNumber2: req.params.phoneNumber2,
+    phoneFax: req.params.phoneFax,
+    desc: req.params.desc
+  })
   .then(company => {
     log.info('CompanyService.created with Id: '+ company.id);
     res.header('Location', '/companies/' + company.id);
@@ -74,7 +94,27 @@ CompanyService.prototype.update = function (req, res, next) {
     else {
       company.update({
         name: req.params.name,
-        ico: req.params.ico
+        street: req.params.street,
+        city: req.params.city,
+        post: req.params.post,
+        country: req.params.country,
+        streetInvoice: req.params.streetInvoice,
+        cityInvoice: req.params.cityInvoice,
+        postInvoice: req.params.postInvoice,
+        countryInvoice: req.params.countryInvoice,
+        customer: req.params.customer,
+        provider: req.params.provider,
+        bank: req.params.bank,
+        account: req.params.account,
+        iban: req.params.iban,
+        idNumber: req.params.idNumber,
+        vatNumber: req.params.vatNumber,
+        email: req.params.email,
+        www: req.params.www,
+        phoneNumber: req.params.phoneNumber,
+        phoneNumber2: req.params.phoneNumber2,
+        phoneFax: req.params.phoneFax,
+        desc: req.params.desc
       })
       .then(company => {
         log.info('CompanyService Id:' + company.id + ' updated');

@@ -17,13 +17,12 @@ module.exports = {
           type: Sequelize.DATE
         },
         name: Sequelize.STRING,
-        ico: Sequelize.INTEGER,
+        idNumber: Sequelize.INTEGER,
       }
-    );
-    done();
+    ).then(function(){ next(false) });
   },
   down: function (queryInterface, Sequelize) {
-    queryInterface.dropTable('Companies');
-    done();
+    queryInterface.dropTable('Companies')
+    .then(function(){ next(false) });
   }
 };

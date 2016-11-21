@@ -22,8 +22,6 @@ module.exports = {
     queryInterface.addColumn('Companies', 'phoneNumber2', Sequelize.STRING);
     queryInterface.addColumn('Companies', 'phoneFax', Sequelize.STRING);
     queryInterface.addColumn('Companies', 'desc', Sequelize.TEXT);
-
-    queryInterface.renameColumn('Companies', 'ico', 'idNumber');
   },
   down: function (queryInterface, Sequelize) {
     queryInterface.removeColumn('Companies', 'street');
@@ -46,7 +44,5 @@ module.exports = {
     queryInterface.removeColumn('Companies', 'phoneNumber2');
     queryInterface.removeColumn('Companies', 'phoneFax');
     queryInterface.removeColumn('Companies', 'desc');
-
-    queryInterface.renameColumn('Companies', 'idNumber', 'ico');
   }
 };
