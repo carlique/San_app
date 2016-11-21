@@ -32,5 +32,3 @@ module.exports = function(sequelize, DataTypes) {
     desc: DataTypes.TEXT
   });
 };
-
-//FRM_ID,FRM_Nazev,FRM_Adresa,FRM_Obec,FRM_PSC,FRM_Stat,FRM_AdresaFaktura,FRM_ObecFaktura,FRM_PSCFaktura,FRM_StatFaktura,FRM_Odberatel,FRM_Dodavatel,FRM_Banka,FRM_CisloUctu,FRM_ICO,FRM_DIC,FRM_Email,FRM_WWW,FRM_Telefon,FRM_TelefonII,FRM_Fax,FRM_Poznamka
