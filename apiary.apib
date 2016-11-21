@@ -50,21 +50,19 @@ object containing a company.
 
     + Headers
 
-            Location: /company/2
+            location: /company/2
 
     + Body
 
             {
                 "status": "success",
-                "data": [
-                            {
+                "data": {
                             "id": 2,
                             "name": "Some company ltd.",
                             "ico": "12345678",
                             "createdAt": null,
                             "updatedAt": null
-                            }
-                        ],
+                        },
                 "message": "Company creted with id: 2"
             }
 
@@ -74,10 +72,10 @@ object containing a company.
     + id (number)
 
         The ID of the desired company.
-        
+
 ### Get a Single Company [GET]
 
-Get a single company information using this action. 
+Get a single company information using this action.
 
 + Request (application/json)
 
