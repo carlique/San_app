@@ -40,6 +40,46 @@ describe('companyService', () => {
             done();
           });
     });
+    it('it should GET only {limit} number of companies', (done) => {
+      var JSON = [
+        { name: "test1", idNumber: "1234567" },
+        { name: "test2", idNumber: "234567" },
+        { name: "test3", idNumber: "34567" }
+      ];
+      Company.bulkCreate(JSON)
+      .then(function() {
+        chai.request(server)
+            .get('/companies?limit=2')
+            .end((err, res) => {
+                res.should.have.status(200);
+                res.body.should.be.a('object');
+                res.body.should.have.property('data').a('array');
+                res.body.should.have.property('data').a('array').with.lengthOf(2);
+                res.body.should.have.property('message').eql('Returned 2 records.');
+              done();
+        });
+      });
+    });
+    it('it should GET only companies with id > {lastId}', (done) => {
+      var JSON = [
+        { name: "test1", idNumber: "1234567" },
+        { name: "test2", idNumber: "234567" },
+        { name: "test3", idNumber: "34567" }
+      ];
+      Company.bulkCreate(JSON)
+      .then(function() {
+        chai.request(server)
+            .get('/companies?lastId=2&limit=1')
+            .end((err, res) => {
+                res.should.have.status(200);
+                res.body.should.be.a('object');
+                res.body.should.have.property('data').a('array');
+                res.body.should.have.property('data').a('array').with.lengthOf(1);
+                res.body.should.have.property('message').eql('Returned 1 records.');
+              done();
+            });
+      });
+    });
   });
 
   /*
@@ -49,7 +89,7 @@ describe('companyService', () => {
     it('it should not POST a company with empty name', (done) => {
       let company = {
         name: "",
-        ico: "1234567",
+        idNumber: "1234567",
       }
       chai.request(server)
         .post('/companies')
@@ -64,7 +104,7 @@ describe('companyService', () => {
       it('it should POST a company ', (done) => {
         let company = {
           name: "test",
-          ico: "1234567",
+          idNumber: "1234567",
         }
         chai.request(server)
           .post('/companies')
@@ -74,7 +114,7 @@ describe('companyService', () => {
               res.should.have.header('Location','/companies/1');
               res.body.should.be.a('object');
               res.body.should.have.property('data').with.deep.property('name').eql('test');
-              res.body.should.have.property('data').with.deep.property('ico').eql('1234567');
+              res.body.should.have.property('data').with.deep.property('idNumber').eql('1234567');
             done();
           });
       });
@@ -85,7 +125,7 @@ describe('companyService', () => {
    */
   describe('/GET/:id company', () => {
     it('it should GET a company by the given id', (done) => {
-      Company.build({ name: "test", ico: "1234567" })
+      Company.build({ name: "test", idNumber: "1234567" })
       .save()
       .then((company) => {
         chai.request(server)
@@ -95,7 +135,7 @@ describe('companyService', () => {
             res.should.have.status(200);
             res.body.should.be.a('object');
             res.body.should.have.property('data').with.deep.property('name').eql('test');
-            res.body.should.have.property('data').with.deep.property('ico').eql('1234567');
+            res.body.should.have.property('data').with.deep.property('idNumber').eql('1234567');
             res.body.should.have.property('message').eql('Returned company with id: ' + company.id);
           done();
         });
@@ -108,16 +148,16 @@ describe('companyService', () => {
    */
   describe('/PUT/:id company', () => {
     it('it should UPDATE a company given the id', (done) => {
-      Company.build({ name: "test2", ico: "1234567" })
+      Company.build({ name: "test2", idNumber: "1234567" })
       .save()
       .then((company) => {
         chai.request(server)
         .put('/companies/' + company.id)
-        .send({ name: "test2", ico: "7654321", })
+        .send({ name: "test2", idNumber: "7654321", })
         .end((err, res) => {
             res.should.have.status(200);
             res.body.should.be.a('object');
-            res.body.should.have.property('data').with.deep.property('ico').eql('7654321');
+            res.body.should.have.property('data').with.deep.property('idNumber').eql('7654321');
             res.body.should.have.property('message').eql('Company updated with id: ' + company.id);
           done();
         });
@@ -130,7 +170,7 @@ describe('companyService', () => {
    */
   describe('/DELETE/:id company', () => {
       it('it should DELETE a company given the id', (done) => {
-        Company.build({ name: "test2", ico: "1234567" })
+        Company.build({ name: "test2", idNumber: "1234567" })
         .save()
         .then((company) => {
                 chai.request(server)

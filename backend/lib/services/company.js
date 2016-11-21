@@ -12,7 +12,19 @@ function CompanyService () {
 }
 
 CompanyService.prototype.getAll = function (req, res, next) {
-  Company.findAll({}).then(companies => {
+  var maxRecords = req.params.limit ? req.params.limit : 10;
+  var lastId = req.params.lastId ? req.params.lastId : 0;
+
+  if (maxRecords > 50) maxRecords = 50;
+
+  Company.findAll({
+      limit: maxRecords,
+      where: {
+        id: {
+          $gt: lastId
+        }
+      }
+    }).then(companies => {
     log.info('CompanyService.getAll returns: '+ companies.length +' records');
     res.send(200, Response.success(companies, "Returned " + companies.length + " records."));
     next (false);
