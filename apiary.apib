@@ -7,7 +7,7 @@ Polls is a simple API allowing consumers to view polls and vote in them.
 
 # Group Companies
 
-## All Companies [/companies{limit}]
+## All Companies [/companies]
 
 ### List All Companies [GET]
 
@@ -66,10 +66,10 @@ object containing a company.
                 "message": "Company creted with id: 2"
             }
 
-### Single Company [/companies/{id}]
+## Single Company [/companies/{id}]
 
 + Parameters
-    + id (number)
+    + id: `2` (number)
 
         The ID of the desired company.
 
@@ -83,14 +83,12 @@ Get a single company information using this action.
 
         {
             "status": "success",
-            "data": [
-                        {
+            "data": {
                         "id": 2,
                         "name": "Some company ltd.",
                         "ico": "12345678",
                         "createdAt": null,
                         "updatedAt": null
-                        }
-                    ],
+                    },
             "message": "Company creted with id: 2"
         }
