@@ -87,9 +87,7 @@ describe('contacts Service', () => {
   * Test the /POST route
   */
   describe('/POST contact', () => {
-    //TODO: Test on company reference
-
-    it('it should not POST a contact with empty names', (done) => {
+    it('it should not POST a contact with empty name', (done) => {
       let contact = {
         firstName: "John",
         lastName: "",
@@ -104,12 +102,32 @@ describe('contacts Service', () => {
             res.body.should.have.property('message').eql('Validation error');
           done();
         });
-      });
-      it('it should POST a contact ', (done) => {
+    });
+    it('it should POST a contact ', (done) => {
+      let contact = {
+        firstName: "John",
+        lastName: "Doe"
+      }
+      chai.request(server)
+        .post('/contacts')
+        .send(contact)
+        .end((err, res) => {
+            res.should.have.status(201);
+            res.should.have.header('Location','/contacts/1');
+            res.body.should.be.a('object');
+            res.body.should.have.property('data').with.deep.property('firstName').eql('John');
+            res.body.should.have.property('data').with.deep.property('id').eql(1);
+          done();
+        });
+    });
+    it('it should POST a contact referenced to an existing company', (done) => {
+      Company.build({ name: "test", idNumber: "1234567" })
+      .save()
+      .then((company) => {
         let contact = {
-          firstName: "John",
-          lastName: "Doe",
-          phoneNumber: "1234567"
+          firstName: "Jane",
+          lastName: "Smith",
+          companyId: company.id
         }
         chai.request(server)
           .post('/contacts')
@@ -118,11 +136,29 @@ describe('contacts Service', () => {
               res.should.have.status(201);
               res.should.have.header('Location','/contacts/1');
               res.body.should.be.a('object');
-              res.body.should.have.property('data').with.deep.property('firstName').eql('John');
+              res.body.should.have.property('data').with.deep.property('firstName').eql('Jane');
               res.body.should.have.property('data').with.deep.property('id').eql(1);
+              res.body.should.have.property('data').with.deep.property('CompanyId').eql(company.id);
             done();
           });
       });
+    });
+    it('it should not POST a contact referencing to a non-existing company', (done) => {
+      let contact = {
+        firstName: "John",
+        lastName: "Doe",
+        companyId: 999
+      }
+      chai.request(server)
+        .post('/contacts')
+        .send(contact)
+        .end((err, res) => {
+            res.should.have.status(500);
+            res.body.should.be.a('object');
+            res.body.should.have.property('status').eql('fail');
+          done();
+        });
+    });
   });
 
   /*

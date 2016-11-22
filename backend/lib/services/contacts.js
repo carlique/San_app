@@ -58,6 +58,7 @@ ContactsService.prototype.create = function (req, res, next) {
   Contact.create({
     firstName: req.params.firstName,
     lastName: req.params.lastName,
+    CompanyId: req.params.companyId,
     title: req.params.title,
     position: req.params.position,
     street: req.params.street,
@@ -73,7 +74,7 @@ ContactsService.prototype.create = function (req, res, next) {
   .then(contact => {
     log.info('Contact created with Id '+ contact.id);
     res.header('Location', '/contacts/' + contact.id);
-    res.send(201, Response.success(contact, "Contact creted with id: " + contact.id));
+    res.send(201, Response.success(contact, "Contact created with id: " + contact.id));
     next(false);
   })
   .catch(Sequelize.ValidationError, function (err) {
