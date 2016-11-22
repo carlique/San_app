@@ -10,14 +10,10 @@ module.exports = {
           primaryKey: true,
           autoIncrement: true
         },
-        createdAt: {
-          type: Sequelize.DATE
-        },
-        updatedAt: {
-          type: Sequelize.DATE
-        },
+        createdAt: Sequelize.DATE,
+        updatedAt: Sequelize.DATE,
         firstName: Sequelize.STRING,
-        sureName: Sequelize.STRING,
+        lastName: Sequelize.STRING,
         title: Sequelize.STRING,
         companyId: {
           type: Sequelize.INTEGER,

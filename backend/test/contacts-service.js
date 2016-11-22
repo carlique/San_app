@@ -7,15 +7,16 @@ let chaiHttp = require('chai-http');
 let server = require('../server');
 let should = chai.should();
 
-let companyService = require('../lib/services/companies');
+let ContactsService = require('../lib/services/contacts');
 let models = require('../lib/models');
+let Contact = models.Contact;
 let Company = models.Company;
 
 chai.use(chaiHttp);
 
-describe('companyService', () => {
+describe('contacts Service', () => {
   beforeEach(function(done) {
-    Company.sync({ force : true }) // drops table and re-creates it
+    Contact.sync({ force : true }) // drops table and re-creates it
       .then(function() {
         done(null);
       })
@@ -27,10 +28,10 @@ describe('companyService', () => {
   /*
   * Test the /GET route
   */
-  describe('/GET company', () => {
-    it('it should GET all the companies', (done) => {
+  describe('/GET contacts', () => {
+    it('it should GET all the contacts', (done) => {
       chai.request(server)
-          .get('/companies')
+          .get('/contacts')
           .end((err, res) => {
               res.should.have.status(200);
               res.body.should.be.a('object');
@@ -40,16 +41,16 @@ describe('companyService', () => {
             done();
           });
     });
-    it('it should GET only {limit} number of companies', (done) => {
+    it('it should GET only {limit} number of contacts', (done) => {
       var JSON = [
-        { name: "test1", idNumber: "1234567" },
-        { name: "test2", idNumber: "234567" },
-        { name: "test3", idNumber: "34567" }
+        { firstName: "John", lastName: "Doe" },
+        { firstName: "Jane", lastName: "Smith" },
+        { firstName: "Eve", lastName: "Dell" }
       ];
-      Company.bulkCreate(JSON)
+      Contact.bulkCreate(JSON)
       .then(function() {
         chai.request(server)
-            .get('/companies?limit=2')
+            .get('/contacts?limit=2')
             .end((err, res) => {
                 res.should.have.status(200);
                 res.body.should.be.a('object');
@@ -60,16 +61,16 @@ describe('companyService', () => {
         });
       });
     });
-    it('it should GET only companies with id > {lastId}', (done) => {
+    it('it should GET only contacts with id > {lastId}', (done) => {
       var JSON = [
-        { name: "test1", idNumber: "1234567" },
-        { name: "test2", idNumber: "234567" },
-        { name: "test3", idNumber: "34567" }
+        { firstName: "John", lastName: "Doe" },
+        { firstName: "Jane", lastName: "Smith" },
+        { firstName: "Eve", lastName: "Dell" }
       ];
-      Company.bulkCreate(JSON)
+      Contact.bulkCreate(JSON)
       .then(function() {
         chai.request(server)
-            .get('/companies?lastId=2&limit=1')
+            .get('/contacts?lastId=2&limit=1')
             .end((err, res) => {
                 res.should.have.status(200);
                 res.body.should.be.a('object');
@@ -85,15 +86,18 @@ describe('companyService', () => {
   /*
   * Test the /POST route
   */
-  describe('/POST book', () => {
-    it('it should not POST a company with empty name', (done) => {
-      let company = {
-        name: "",
-        idNumber: "1234567",
+  describe('/POST contact', () => {
+    //TODO: Test on company reference
+
+    it('it should not POST a contact with empty names', (done) => {
+      let contact = {
+        firstName: "John",
+        lastName: "",
+        phoneNumber: "1234567"
       }
       chai.request(server)
-        .post('/companies')
-        .send(company)
+        .post('/contacts')
+        .send(contact)
         .end((err, res) => {
             res.should.have.status(422);
             res.body.should.be.a('object');
@@ -101,20 +105,21 @@ describe('companyService', () => {
           done();
         });
       });
-      it('it should POST a company ', (done) => {
-        let company = {
-          name: "test",
-          idNumber: "1234567",
+      it('it should POST a contact ', (done) => {
+        let contact = {
+          firstName: "John",
+          lastName: "Doe",
+          phoneNumber: "1234567"
         }
         chai.request(server)
-          .post('/companies')
-          .send(company)
+          .post('/contacts')
+          .send(contact)
           .end((err, res) => {
               res.should.have.status(201);
-              res.should.have.header('Location','/companies/1');
+              res.should.have.header('Location','/contacts/1');
               res.body.should.be.a('object');
-              res.body.should.have.property('data').with.deep.property('name').eql('test');
-              res.body.should.have.property('data').with.deep.property('idNumber').eql('1234567');
+              res.body.should.have.property('data').with.deep.property('firstName').eql('John');
+              res.body.should.have.property('data').with.deep.property('id').eql(1);
             done();
           });
       });
@@ -123,20 +128,20 @@ describe('companyService', () => {
   /*
    * Test the /GET/:id route
    */
-  describe('/GET/:id company', () => {
-    it('it should GET a company by the given id', (done) => {
-      Company.build({ name: "test", idNumber: "1234567" })
+  describe('/GET/:id contact', () => {
+    it('it should GET a contact by the given id', (done) => {
+      Contact.build({ firstName: "John", lastName: "Doe" })
       .save()
-      .then((company) => {
+      .then((contact) => {
         chai.request(server)
-        .get('/companies/' + company.id)
-        .send(company)
+        .get('/contacts/' + contact.id)
+        .send(contact)
         .end((err, res) => {
             res.should.have.status(200);
             res.body.should.be.a('object');
-            res.body.should.have.property('data').with.deep.property('name').eql('test');
-            res.body.should.have.property('data').with.deep.property('idNumber').eql('1234567');
-            res.body.should.have.property('message').eql('Returned company with id: ' + company.id);
+            res.body.should.have.property('data').with.deep.property('firstName').eql('John');
+            res.body.should.have.property('data').with.deep.property('lastName').eql('Doe');
+            res.body.should.have.property('message').eql('Returned contact with id: ' + contact.id);
           done();
         });
       });
@@ -146,19 +151,19 @@ describe('companyService', () => {
   /*
    * Test the /PUT/:id route
    */
-  describe('/PUT/:id company', () => {
-    it('it should UPDATE a company given the id', (done) => {
-      Company.build({ name: "test2", idNumber: "1234567" })
+  describe('/PUT/:id contact', () => {
+    it('it should UPDATE a contact given the id', (done) => {
+      Contact.build({ firstName: "Joe", lastName: "Doe" })
       .save()
-      .then((company) => {
+      .then((contact) => {
         chai.request(server)
-        .put('/companies/' + company.id)
-        .send({ name: "test2", idNumber: "7654321", })
+        .put('/contacts/' + contact.id)
+        .send({ firstName: "John", lastName: "Doe", })
         .end((err, res) => {
             res.should.have.status(200);
             res.body.should.be.a('object');
-            res.body.should.have.property('data').with.deep.property('idNumber').eql('7654321');
-            res.body.should.have.property('message').eql('Company updated with id: ' + company.id);
+            res.body.should.have.property('data').with.deep.property('firstName').eql('John');
+            res.body.should.have.property('message').eql('Contact updated with id: ' + contact.id);
           done();
         });
       });
@@ -168,17 +173,17 @@ describe('companyService', () => {
   /*
    * Test the /DELETE/:id route
    */
-  describe('/DELETE/:id company', () => {
-      it('it should DELETE a company given the id', (done) => {
-        Company.build({ name: "test2", idNumber: "1234567" })
+  describe('/DELETE/:id contact', () => {
+      it('it should DELETE a contact given the id', (done) => {
+        Contact.build({ firstName: "Joe", lastName: "Doe" })
         .save()
-        .then((company) => {
+        .then((contact) => {
                 chai.request(server)
-                .delete('/companies/' + company.id)
+                .delete('/contacts/' + contact.id)
                 .end((err, res) => {
                     res.should.have.status(200);
                     res.body.should.be.a('object');
-                    res.body.should.have.property('message').eql('Company deleted with id: ' + company.id);
+                    res.body.should.have.property('message').eql('Contact deleted with id: ' + contact.id);
                   done();
                 });
           });

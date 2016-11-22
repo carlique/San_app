@@ -2,11 +2,14 @@
 
 module.exports = function(sequelize, DataTypes) {
   return sequelize.define('Contact', {
-    first_name: DataTypes.STRING,
-    last_name: DataTypes.STRING,
     firstName: DataTypes.STRING,
-    sureName: DataTypes.STRING,
-    title: DataTypes.STRING,
+    lastName: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notEmpty: true
+      }
+    },
     title: DataTypes.STRING,
     position: DataTypes.STRING,
     street: DataTypes.STRING,

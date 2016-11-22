@@ -7,4 +7,5 @@ module.exports = function(server) {
   });
 
   require ('./companies')(server);
+  require ('./contacts')(server);
 }
