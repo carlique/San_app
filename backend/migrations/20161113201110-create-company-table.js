@@ -19,10 +19,10 @@ module.exports = {
         name: Sequelize.STRING,
         idNumber: Sequelize.INTEGER,
       }
-    ).then(function(){ next(false) });
+    ).done();
   },
   down: function (queryInterface, Sequelize) {
     queryInterface.dropTable('Companies')
-    .then(function(){ next(false) });
+    .done();
   }
 };

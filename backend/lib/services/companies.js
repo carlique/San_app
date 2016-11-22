@@ -6,12 +6,12 @@ const Response = require('../utils/response');
 var models = require('../models');
 var Company = models.Company;
 
-module.exports = CompanyService;
+module.exports = CompaniesService;
 
-function CompanyService () {
+function CompaniesService () {
 }
 
-CompanyService.prototype.getAll = function (req, res, next) {
+CompaniesService.prototype.getAll = function (req, res, next) {
   var maxRecords = req.params.limit ? req.params.limit : 10;
   var lastId = req.params.lastId ? req.params.lastId : 0;
 
@@ -36,7 +36,7 @@ CompanyService.prototype.getAll = function (req, res, next) {
   });
 };
 
-CompanyService.prototype.getById = function (req, res, next) {
+CompaniesService.prototype.getById = function (req, res, next) {
   Company.findById(req.params.id).then(company => {
     if (!company) {
       log.info('CompanyService.getById: id not found: '+ req.params.id);
@@ -54,7 +54,7 @@ CompanyService.prototype.getById = function (req, res, next) {
   });
 }
 
-CompanyService.prototype.create = function (req, res, next) {
+CompaniesService.prototype.create = function (req, res, next) {
   Company.create({
     name: req.params.name,
     street: req.params.street,
@@ -96,7 +96,7 @@ CompanyService.prototype.create = function (req, res, next) {
   });
 };
 
-CompanyService.prototype.update = function (req, res, next) {
+CompaniesService.prototype.update = function (req, res, next) {
   Company.findById(req.params.id).then(company => {
     if (!company) {
       log.info('CompanyService.update: id not found: '+ req.params.id);
@@ -145,7 +145,7 @@ CompanyService.prototype.update = function (req, res, next) {
   });
 };
 
-CompanyService.prototype.destroy = function (req, res, next) {
+CompaniesService.prototype.destroy = function (req, res, next) {
   Company.findById(req.params.id).then(company => {
     if (!company) {
       log.info('CompanyService.destroy: id not found: '+ req.params.id);

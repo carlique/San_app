@@ -1,4 +1,4 @@
-const PATH_TO_RESOURCE = '../lib/resources/company';
+const PATH_TO_RESOURCE = '../lib/resources/companies';
 
 module.exports = function(server) {
 
