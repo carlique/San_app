@@ -12,6 +12,11 @@ module.exports = function(server) {
     resource.getById(req, res, next);
   });
 
+  server.get('/companies/:id/contacts', (req, res, next) => {
+    var resource = new (require(PATH_TO_RESOURCE));
+    resource.getContactsForId(req, res, next);
+  });
+
   server.post('/companies', (req, res, next) => {
     var resource = new (require(PATH_TO_RESOURCE));
     resource.create(req, res, next);

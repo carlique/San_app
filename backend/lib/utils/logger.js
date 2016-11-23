@@ -6,18 +6,18 @@ if (process.env.NODE_ENV === 'test') {
   streams = [
     {
       level: 'info',
-      path: './sanapp-test.log'            // log INFO and above to stdout
+      path: './sanapp-test.log'         // log INFO and above to test.log
     }
   ]
 } else {
   streams = [
     {
       level: 'error',
-      path: './sanapp-error.log'            // log INFO and above to stdout
+      path: './sanapp-error.log'        // log INFO and above to error.log
     },
     {
       level: 'info',
-      stream: process.stdout  // log ERROR and above to a file
+      stream: process.stdout            // log ERROR and above to stdout
     }
   ]
 }

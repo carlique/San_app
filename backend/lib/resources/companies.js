@@ -15,6 +15,12 @@ Companies.prototype.getAll = function (req, res, next) {
   service.getAll(req, res, next);
 };
 
+
+Companies.prototype.getContactsForId = function (req, res, next) {
+  var service = new (require('./../services/companies'));
+  service.getContactsForId(req, res, next);
+};
+
 Companies.prototype.create = function (req, res, next) {
   var service = new (require('./../services/companies'));
   service.create(req, res, next);

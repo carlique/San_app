@@ -1,5 +1,8 @@
 'use strict';
 
+// TODO: use debug tool
+// TODO: write comments
+
 const Sequelize = require("sequelize");
 const Response = require('../utils/response');
 
@@ -27,12 +30,12 @@ CompaniesService.prototype.getAll = function (req, res, next) {
     }).then(companies => {
     log.info('CompanyService.getAll returns: '+ companies.length +' records');
     res.send(200, Response.success(companies, "Returned " + companies.length + " records."));
-    next (false);
+    return next ();
   })
   .catch(err => {
     res.send(500, Response.fail(null, "Unexpected error", err));
     log.error(err.stack);
-    next(false);
+    return next (err);
   });
 };
 
@@ -45,12 +48,32 @@ CompaniesService.prototype.getById = function (req, res, next) {
       log.info('CompanyService.getById: ' + JSON.stringify(company));
       res.send(200, Response.success(company,"Returned company with id: " + req.params.id));
     }
-    next (false);
+    return next ();
   })
   .catch(err => {
     res.send(500, Response.fail(null, "Unexpected error", err));
     log.error(err.stack);
-    next(false);
+    return next (err);
+  });
+}
+
+CompaniesService.prototype.getContactsForId = function (req, res, next) {
+  Company.findById(req.params.id).then(company => {
+    if (!company) {
+      log.info('CompanyService.getContactsForId: id not found: '+ req.params.id);
+      res.send(404, Response.error(null, "Couldn't find company with id: " + req.params.id));
+    } else {
+      company.getContacts().then(contacts => {
+        log.info('CompanyService.getContactsForId returns: '+ contacts.length +' records');
+        res.send(200, Response.success(contacts, "Returned " + contacts.length + " records."));
+      });
+      return next ();
+    }
+  })
+  .catch(err => {
+    res.send(500, Response.fail(null, "Unexpected error", err));
+    log.error(err.stack);
+    return next (err);
   });
 }
 
@@ -80,19 +103,20 @@ CompaniesService.prototype.create = function (req, res, next) {
     desc: req.params.desc
   })
   .then(company => {
-    log.info('CompanyService.created with Id: '+ company.id);
+    log.info('CompanyService.create: create with Id '+ company.id);
     res.header('Location', '/companies/' + company.id);
     res.send(201, Response.success(company, "Company creted with id: " + company.id));
-    next(false);
+    return next ();
   })
   .catch(Sequelize.ValidationError, function (err) {
+    log.info('CompanyService.create: validation error');
     res.send(422, Response.error(null, "Validation error", err.errors));
-    next(false);
+    return next ();
   })
   .catch(err => {
     res.send(500, Response.fail(null, "Unexpected error", err));
     log.error(err.stack);
-    next(false);
+    return next (err);
   });
 };
 
@@ -101,7 +125,7 @@ CompaniesService.prototype.update = function (req, res, next) {
     if (!company) {
       log.info('CompanyService.update: id not found: '+ req.params.id);
       res.send(404, Response.error(null, "Couldn't find company with id: " + req.params.id));
-      next(false);
+      return next ();
     }
     else {
       company.update({
@@ -131,17 +155,18 @@ CompaniesService.prototype.update = function (req, res, next) {
       .then(company => {
         log.info('CompanyService Id:' + company.id + ' updated');
         res.send(200, Response.success(company, "Company updated with id: " + company.id));
-        next(false);
+        return next ();
       })
       .catch(Sequelize.ValidationError, function (err) {
         res.send(422, Response.error(null, "Validation error", err.errors));
+        return next ();
       })
     }
   })
   .catch(err => {
     res.send(500, Response.fail(null, "Unexpected error", err));
     log.error(err.stack);
-    next(false);
+    return next (err);
   });
 };
 
@@ -150,20 +175,20 @@ CompaniesService.prototype.destroy = function (req, res, next) {
     if (!company) {
       log.info('CompanyService.destroy: id not found: '+ req.params.id);
       res.send(404, Response.error(null, "Couldn't find company with id: " + req.params.id));
-      next(false);
+      return next ();
     }
     else {
       company.destroy()
       .then(function() {
         log.info('CompanyService company with id: ' + req.params.id + ' deleted');
         res.send(200, Response.success(null, "Company deleted with id: " + req.params.id));
-        next(false);
+        return next ();
       })
     }
   })
   .catch(err => {
     res.send(500, Response.fail(null, "Unexpected error", err));
     log.error(err.stack);
-    next(false);
+    return next (err);
   });
 };

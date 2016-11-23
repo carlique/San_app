@@ -10,6 +10,7 @@ let should = chai.should();
 let companyService = require('../lib/services/companies');
 let models = require('../lib/models');
 let Company = models.Company;
+let Contact = models.Contact;
 
 chai.use(chaiHttp);
 
@@ -142,6 +143,33 @@ describe('companies Service', () => {
       });
     });
   });
+
+  /*
+   * Test the /GET/:id/contacts route
+   */
+  describe('/GET/:id/contacts ', () => {
+    it('it should GET all contacts for the company with the given id', (done) => {
+      Company.build({ name: "test", idNumber: "1234567" })
+      .save()
+      .then((company) => {
+        Contact.build({ firstName: "John", lastName: "Doe", CompanyId: company.id })
+        .save()
+        .then((contact) => {
+          chai.request(server)
+          .get('/companies/'+ company.id + '/contacts')
+          .send(contact)
+          .end((err, res) => {
+              res.should.have.status(200);
+              res.body.should.be.a('object');
+              res.body.should.have.property('data').a('array');
+              res.body.should.have.property('message').eql('Returned 1 records.');
+            done();
+          });
+        });
+      });
+    });
+  });
+
 
   /*
    * Test the /PUT/:id route

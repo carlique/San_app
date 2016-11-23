@@ -25,6 +25,7 @@ models.forEach(function(model) {
 // describe relationships
 (function(m) {
   m.Contact.belongsTo(m.Company);
+  m.Company.hasMany(m.Contact);
 
 //  m.Task.belongsTo(m.User);
 //  m.User.hasMany(m.Task);
