@@ -7,7 +7,6 @@ let chaiHttp = require('chai-http');
 let server = require('../server');
 let should = chai.should();
 
-let ContactsService = require('../lib/services/contacts');
 let models = require('../lib/models');
 let Contact = models.Contact;
 let Company = models.Company;

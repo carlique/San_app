@@ -9,6 +9,12 @@ module.exports = function(sequelize, DataTypes) {
         notEmpty: true
       }
     },
-    vat: DataTypes.DECIMAL(10,2),
+    vat: {
+      type: DataTypes.DECIMAL(10,2),
+      allowNull: false,
+      validate: {
+        notEmpty: true
+      }
+    }
   });
 };

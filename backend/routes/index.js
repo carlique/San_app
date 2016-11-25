@@ -9,4 +9,5 @@ module.exports = function(server) {
   require ('./companies')(server);
   require ('./contacts')(server);
   require ('./resources')(server);
+  require ('./vats')(server);
 }
