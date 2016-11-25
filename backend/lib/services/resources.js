@@ -8,6 +8,7 @@ const Response = require('../utils/response');
 
 var models = require('../models');
 var Resource = models.Resource;
+var VAT = models.VAT;
 
 module.exports = ResourcesService;
 
@@ -25,8 +26,11 @@ ResourcesService.prototype.getAll = function (req, res, next) {
       where: {
         id: {
           $gt: lastId
-        }
-      }
+        },
+      },
+      include: [{
+        model: VAT
+      }]
     }).then(resources => {
     log.info('ResourcesService.getAll returns: '+ resources.length +' records');
     res.send(200, Response.success(resources, "Returned " + resources.length + " records."));
@@ -40,7 +44,10 @@ ResourcesService.prototype.getAll = function (req, res, next) {
 };
 
 ResourcesService.prototype.getById = function (req, res, next) {
-  Resource.findById(req.params.id).then(resource => {
+  Resource.findOne({
+    where: { id: req.params.id },
+    include: [{model: VAT}]
+  }).then(resource => {
     if (!resource) {
       log.info('ResourcesService.getById: id not found: '+ req.params.id);
       res.send(404, Response.error(null, "Couldn't find resource with id: " + req.params.id));
@@ -64,7 +71,8 @@ ResourcesService.prototype.create = function (req, res, next) {
     count: req.params.count,
     price: req.params.price,
     unit: req.params.unit,
-    desc: req.params.desc
+    desc: req.params.desc,
+    VATId: req.params.vatId
   })
   .then(resource => {
     log.info('ResourcesService.create: create with Id '+ resource.id);
@@ -80,7 +88,7 @@ ResourcesService.prototype.create = function (req, res, next) {
   .catch(err => {
     res.send(500, Response.fail(null, "Unexpected error", err));
     log.error(err.stack);
-    return next (err);
+    return next ();
   });
 };
 
@@ -98,7 +106,8 @@ ResourcesService.prototype.update = function (req, res, next) {
         count: req.params.count,
         price: req.params.price,
         unit: req.params.unit,
-        desc: req.params.desc
+        desc: req.params.desc,
+        VATId: req.params.vatId
       })
       .then(resource => {
         log.info('ResourcesService Id:' + resource.id + ' updated');

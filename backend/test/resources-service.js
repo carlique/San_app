@@ -10,8 +10,26 @@ let should = chai.should();
 let ContactsService = require('../lib/services/contacts');
 let models = require('../lib/models');
 let Resource = models.Resource;
+let VAT = models.VAT;
 
 chai.use(chaiHttp);
+
+before(function(done) {
+ VAT.sync({ force : true }) // drops table and re-creates it
+    .then(function() {
+      var JSON = [
+        { id: 1, name: "base VAT", vat: 21 },
+        { id: 2, name: "lowered VAT", vat: 15 }
+      ];
+      VAT.bulkCreate(JSON)
+      .then(function() {
+        done(null);
+      });
+    })
+    .error(function(error) {
+      done(error);
+    });
+});
 
 describe('resources Service', () => {
   beforeEach(function(done) {
@@ -42,9 +60,9 @@ describe('resources Service', () => {
     });
     it('it should GET only {limit} number of resources', (done) => {
       var JSON = [
-        { name: "some stuff", altName: "superstuff" },
-        { name: "some stuff 2", altName: "superstuff" },
-        { name: "some stuff 3", altName: "superstuff" }
+        { name: "some stuff", altName: "superstuff", VATId: 1 },
+        { name: "some stuff 2", altName: "superstuff", VATId: 1  },
+        { name: "some stuff 3", altName: "superstuff", VATId: 1  }
       ];
       Resource.bulkCreate(JSON)
       .then(function() {
@@ -62,9 +80,9 @@ describe('resources Service', () => {
     });
     it('it should GET only resources with id > {lastId}', (done) => {
       var JSON = [
-        { name: "some stuff", altName: "superstuff" },
-        { name: "some stuff 2", altName: "superstuff" },
-        { name: "some stuff 3", altName: "superstuff" }
+        { name: "some stuff", altName: "superstuff", VATId: 1 },
+        { name: "some stuff 2", altName: "superstuff", VATId: 1  },
+        { name: "some stuff 3", altName: "superstuff", VATId: 1  }
       ];
       Resource.bulkCreate(JSON)
       .then(function() {
@@ -85,7 +103,7 @@ describe('resources Service', () => {
   /*
   * Test the /POST route
   */
-  describe('/POST contact', () => {
+  describe('/POST resource', () => {
     it('it should not POST a resource with empty name', (done) => {
       let resource = {
         name: "",
@@ -101,10 +119,29 @@ describe('resources Service', () => {
           done();
         });
     });
+
+    it('it should not POST a resource referencing to a non-existing VAT id', (done) => {
+      let resource = {
+        name: "some stuff",
+        altName: "superstuff",
+        vatId: 11
+      }
+      chai.request(server)
+        .post('/resources')
+        .send(resource)
+        .end((err, res) => {
+            res.should.have.status(500);
+            res.body.should.be.a('object');
+            res.body.should.have.property('status').eql('fail');
+          done();
+        });
+    });
+
     it('it should POST a resource ', (done) => {
       let resource = {
         name: "some stuff",
         altName: "superstuff",
+        vatId: 1
       }
       chai.request(server)
         .post('/resources')
@@ -148,7 +185,7 @@ describe('resources Service', () => {
    */
   describe('/PUT/:id resource', () => {
     it('it should UPDATE a resource given the id', (done) => {
-      Resource.build({ name: "some stuff", altName: "superstuff" })
+      Resource.build({ name: "some stuff", altName: "superstuff", VATId: 1 })
       .save()
       .then((resource) => {
         chai.request(server)

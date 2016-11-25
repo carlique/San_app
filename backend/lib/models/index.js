@@ -17,7 +17,8 @@ var sequelize = new Sequelize(
 var models = [
   'Company',
   'Contact',
-  'Resource'
+  'Resource',
+  'VAT'
 ];
 models.forEach(function(model) {
   module.exports[model] = sequelize.import(__dirname + '/' + model);
@@ -27,10 +28,7 @@ models.forEach(function(model) {
 (function(m) {
   m.Contact.belongsTo(m.Company);
   m.Company.hasMany(m.Contact);
-
-//  m.Task.belongsTo(m.User);
-//  m.User.hasMany(m.Task);
-//  m.User.hasMany(m.PhoneNumber);
+  m.Resource.belongsTo(m.VAT);
 })(module.exports);
 
 // export connection

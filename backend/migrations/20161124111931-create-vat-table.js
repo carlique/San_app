@@ -3,7 +3,7 @@
 module.exports = {
   up: function (queryInterface, Sequelize, done) {
     queryInterface.createTable(
-      'Resources',
+      'VATs',
       {
         id: {
           type: Sequelize.INTEGER,
@@ -13,17 +13,13 @@ module.exports = {
         createdAt: Sequelize.DATE,
         updatedAt: Sequelize.DATE,
         name: Sequelize.STRING,
-        altName: Sequelize.STRING,
-        count: Sequelize.INTEGER,
-        price: Sequelize.DECIMAL(10,2),
-        unit: Sequelize.STRING,
-        desc: Sequelize.TEXT
+        vat: Sequelize.DECIMAL(10,2),
       }
     ).done();
   },
 
   down: function (queryInterface, Sequelize) {
-    queryInterface.dropTable('Resources')
+    queryInterface.dropTable('VATs')
     .done();
   }
 };

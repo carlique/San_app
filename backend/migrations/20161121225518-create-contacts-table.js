@@ -2,7 +2,7 @@
 
 module.exports = {
   up: function (queryInterface, Sequelize, done) {
-    queryInterface.createTable(
+    return queryInterface.createTable(
       'Contacts',
       {
         id: {
@@ -32,11 +32,10 @@ module.exports = {
         www: Sequelize.STRING,
         desc: Sequelize.TEXT
       }
-    ).done();
+    );
   },
 
   down: function (queryInterface, Sequelize) {
-    queryInterface.dropTable('Contacts')
-    .done();
+    return queryInterface.dropTable('Contacts');
   }
 };
