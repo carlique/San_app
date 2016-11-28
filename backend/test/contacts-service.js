@@ -1,5 +1,3 @@
-// TODO: Test get on all fields
-
 //During the test the env variable is set to test
 process.env.NODE_ENV = 'test';
 
@@ -107,7 +105,18 @@ describe('contacts Service', () => {
     it('it should POST a contact ', (done) => {
       let contact = {
         firstName: "John",
-        lastName: "Doe"
+        lastName: "Doe",
+        title: "Mr.",
+        position: "CEO",
+        street: "Some street 666",
+        city: "Prague",
+        post: "170 00",
+        country: "Czech Republic",
+        phoneNumber: "+777777776",
+        phoneNumber2: "+777777777",
+        email: "john@doe.com",
+        www: "http://some.url.ltd",
+        desc: "Some very long text description"
       }
       chai.request(server)
         .post('/contacts')
@@ -117,6 +126,18 @@ describe('contacts Service', () => {
             res.should.have.header('Location','/contacts/1');
             res.body.should.be.a('object');
             res.body.should.have.property('data').with.deep.property('firstName').eql('John');
+            res.body.should.have.property('data').with.deep.property('lastName').eql('Doe');
+            res.body.should.have.property('data').with.deep.property('title').eql('Mr.');
+            res.body.should.have.property('data').with.deep.property('position').eql('CEO');
+            res.body.should.have.property('data').with.deep.property('street').eql('Some street 666');
+            res.body.should.have.property('data').with.deep.property('city').eql('Prague');
+            res.body.should.have.property('data').with.deep.property('post').eql('170 00');
+            res.body.should.have.property('data').with.deep.property('country').eql('Czech Republic');
+            res.body.should.have.property('data').with.deep.property('phoneNumber').eql('+777777776');
+            res.body.should.have.property('data').with.deep.property('phoneNumber2').eql('+777777777');
+            res.body.should.have.property('data').with.deep.property('email').eql('john@doe.com');
+            res.body.should.have.property('data').with.deep.property('www').eql('http://some.url.ltd');
+            res.body.should.have.property('data').with.deep.property('desc').eql('Some very long text description');
             res.body.should.have.property('data').with.deep.property('id').eql(1);
           done();
         });
