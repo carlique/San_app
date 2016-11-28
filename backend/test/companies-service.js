@@ -30,7 +30,7 @@ describe('companies Service', () => {
   * Test the /GET route
   */
   describe('/GET company', () => {
-    it('it should GET all the companies', (done) => {
+    it('it should GET all companies', (done) => {
       chai.request(server)
           .get('/companies')
           .end((err, res) => {
@@ -132,7 +132,6 @@ describe('companies Service', () => {
       .then((company) => {
         chai.request(server)
         .get('/companies/' + company.id)
-        .send(company)
         .end((err, res) => {
             res.should.have.status(200);
             res.body.should.be.a('object');

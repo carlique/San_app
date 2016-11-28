@@ -29,7 +29,7 @@ describe('VAT Service', () => {
   * Test the /GET route
   */
   describe('/GET VATs', () => {
-    it('it should GET all the VATs', (done) => {
+    it('it should GET all VATs', (done) => {
       chai.request(server)
           .get('/vats')
           .end((err, res) => {
@@ -108,7 +108,6 @@ describe('VAT Service', () => {
       .then((vat) => {
         chai.request(server)
         .get('/vats/' + vat.id)
-        .send(vat)
         .end((err, res) => {
             res.should.have.status(200);
             res.body.should.be.a('object');

@@ -13,6 +13,7 @@ let models = require('../lib/models');
 let Calc = models.Calculation;
 let Company = models.Company;
 let Contact = models.Contact;
+let Version = models.Version;
 
 chai.use(chaiHttp);
 
@@ -27,11 +28,21 @@ describe('calculations Service', () => {
       });
     });
 
+    beforeEach(function(done) {
+      Version.sync({ force : true }) // drops table and re-creates it
+        .then(function() {
+          done(null);
+        })
+        .error(function(error) {
+          done(error);
+        });
+      });
+
   /*
   * Test the /GET route
   */
   describe('/GET calculations', () => {
-    it('it should GET all the calculations', (done) => {
+    it('it should GET all calculations', (done) => {
       chai.request(server)
           .get('/calculations')
           .end((err, res) => {
@@ -130,12 +141,33 @@ describe('calculations Service', () => {
         .post('/calculations')
         .send(calculation)
         .end((err, res) => {
-            res.should.have.status(201);
-            res.should.have.header('Location','/calculations/1');
-            res.body.should.be.a('object');
-            res.body.should.have.property('data').with.deep.property('name').eql('Some Calc 1');
-            res.body.should.have.property('data').with.deep.property('id').eql(1);
+          res.should.have.status(201);
+          res.should.have.header('Location','/calculations/1');
+          res.body.should.be.a('object');
+          res.body.should.have.property('data').with.deep.property('name').eql('Some Calc 1');
+          res.body.should.have.property('data').with.deep.property('id').eql(1);
           done();
+        });
+    });
+
+    it('it should create a default version for POSTed calculation', (done) => {
+      let calculation = {
+        name: "Some Calc 1",
+        number: "16/0001",
+      }
+      chai.request(server)
+        .post('/calculations')
+        .send(calculation)
+        .end(function() {
+          chai.request(server)
+            .get('/calculations/1/versions/1')
+            .end((err, res) => {
+              res.should.have.status(200);
+              res.body.should.be.a('object');
+              res.body.should.have.property('data').with.deep.property('number').eql(1);
+              res.body.should.have.property('data').with.deep.property('id').eql(1);
+              done();
+            });
         });
     });
 
@@ -233,7 +265,6 @@ describe('calculations Service', () => {
       .then((calculation) => {
         chai.request(server)
         .get('/calculations/' + calculation.id)
-        .send(calculation)
         .end((err, res) => {
             res.should.have.status(200);
             res.body.should.be.a('object');

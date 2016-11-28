@@ -19,7 +19,8 @@ var models = [
   'Company',
   'Contact',
   'Resource',
-  'VAT'
+  'VAT',
+  'Version',
 ];
 models.forEach(function(model) {
   module.exports[model] = sequelize.import(__dirname + '/' + model);
@@ -30,9 +31,32 @@ models.forEach(function(model) {
   m.Contact.belongsTo(m.Company);
   m.Calculation.belongsTo(m.Company);
   m.Calculation.belongsTo(m.Contact);
+  m.Calculation.hasMany(m.Version);
   m.Company.hasMany(m.Calculation);
   m.Company.hasMany(m.Contact);
   m.Resource.belongsTo(m.VAT);
+  m.Version.belongsTo(m.Calculation);
+})(module.exports);
+
+
+// define hooks
+(function(m) {
+  m.Calculation.afterCreate( function(calculation) {
+    return m.Version.create({
+      desc: "",
+      CalculationId: calculation.id
+    });
+  });
+
+  m.Version.beforeCreate( function(version, options) {
+    return m.Version.max('number', {
+      where: { CompanyId: version.CompanyId }
+    })
+    .then(max => {
+      if (isNaN(max)) max = 0;
+      version.number = max + 1;
+    })
+  })
 })(module.exports);
 
 // export connection

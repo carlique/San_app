@@ -61,7 +61,7 @@ CompaniesService.prototype.getContactsForId = function (req, res, next) {
   Company.findById(req.params.id).then(company => {
     if (!company) {
       log.info('CompanyService.getContactsForId: id not found: '+ req.params.id);
-      res.send(404, Response.error(null, "Couldn't find company with id: " + req.params.id));
+      return res.send(404, Response.error(null, "Couldn't find company with id: " + req.params.id));
     } else {
       company.getContacts().then(contacts => {
         log.info('CompanyService.getContactsForId returns: '+ contacts.length +' records');

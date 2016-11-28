@@ -10,6 +10,8 @@ module.exports = {
           primaryKey: true,
           autoIncrement: true
         },
+        createdAt: Sequelize.DATE,
+        updatedAt: Sequelize.DATE,
         number: Sequelize.STRING,
         name: Sequelize.STRING,
         companyId: {

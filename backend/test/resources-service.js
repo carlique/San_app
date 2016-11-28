@@ -47,7 +47,7 @@ describe('resources Service', () => {
   * Test the /GET route
   */
   describe('/GET resources', () => {
-    it('it should GET all the resources', (done) => {
+    it('it should GET all resources', (done) => {
       chai.request(server)
           .get('/resources')
           .end((err, res) => {
@@ -168,7 +168,6 @@ describe('resources Service', () => {
       .then((resource) => {
         chai.request(server)
         .get('/resources/' + resource.id)
-        .send(resource)
         .end((err, res) => {
             res.should.have.status(200);
             res.body.should.be.a('object');

@@ -28,7 +28,7 @@ describe('contacts Service', () => {
   * Test the /GET route
   */
   describe('/GET contacts', () => {
-    it('it should GET all the contacts', (done) => {
+    it('it should GET all contacts', (done) => {
       chai.request(server)
           .get('/contacts')
           .end((err, res) => {
@@ -86,7 +86,7 @@ describe('contacts Service', () => {
   * Test the /POST route
   */
   describe('/POST contact', () => {
-    it('it should not POST a contact with empty name', (done) => {
+    it('it should not POST a contact with an empty name', (done) => {
       let contact = {
         firstName: "John",
         lastName: "",
@@ -193,7 +193,6 @@ describe('contacts Service', () => {
       .then((contact) => {
         chai.request(server)
         .get('/contacts/' + contact.id)
-        .send(contact)
         .end((err, res) => {
             res.should.have.status(200);
             res.body.should.be.a('object');

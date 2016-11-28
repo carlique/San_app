@@ -1,5 +1,5 @@
-const PATH_TO_RESOURCE = '../lib/resources/calculations';
-const BASE_URI = '/calculations';
+const PATH_TO_RESOURCE = '../lib/resources/versions';
+const BASE_URI = '/calculations/:calculationId/versions';
 
 module.exports = function(server) {
 
@@ -27,7 +27,5 @@ module.exports = function(server) {
     var resource = new (require(PATH_TO_RESOURCE));
     resource.destroy(req, res, next);
   });
-
-  require ('./versions')(server);
 
 }

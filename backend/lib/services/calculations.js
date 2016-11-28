@@ -8,6 +8,7 @@ const Response = require('../utils/response');
 
 var models = require('../models');
 var Calc = models.Calculation;
+var Version = models.Version;
 
 module.exports = CalculationsService;
 
