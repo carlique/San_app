@@ -1,8 +1,7 @@
 'use strict';
 
 // TODO: add type M:N relationship
-// TODO: add vat hasOne relationship
-// TODO: add grup M:N relationship
+// TODO: add group M:N relationship
 
 module.exports = function(sequelize, DataTypes) {
   return sequelize.define('Resource', {

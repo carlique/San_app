@@ -15,6 +15,7 @@ var sequelize = new Sequelize(
 
 // load models
 var models = [
+  'Calculation',
   'Company',
   'Contact',
   'Resource',
@@ -27,6 +28,9 @@ models.forEach(function(model) {
 // describe relationships
 (function(m) {
   m.Contact.belongsTo(m.Company);
+  m.Calculation.belongsTo(m.Company);
+  m.Calculation.belongsTo(m.Contact);
+  m.Company.hasMany(m.Calculation);
   m.Company.hasMany(m.Contact);
   m.Resource.belongsTo(m.VAT);
 })(module.exports);

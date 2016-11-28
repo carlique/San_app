@@ -1,5 +1,5 @@
-const PATH_TO_RESOURCE = '../lib/resources/vats';
-const BASE_URI = '/vats';
+const PATH_TO_RESOURCE = '../lib/resources/calculations';
+const BASE_URI = '/calculations';
 
 module.exports = function(server) {
 

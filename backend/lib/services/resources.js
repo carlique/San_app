@@ -77,7 +77,7 @@ ResourcesService.prototype.create = function (req, res, next) {
   .then(resource => {
     log.info('ResourcesService.create: create with Id '+ resource.id);
     res.header('Location', '/resources/' + resource.id);
-    res.send(201, Response.success(resource, "Resource creted with id: " + resource.id));
+    res.send(201, Response.success(resource, "Resource created with id: " + resource.id));
     return next ();
   })
   .catch(Sequelize.ValidationError, function (err) {

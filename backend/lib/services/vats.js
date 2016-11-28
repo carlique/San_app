@@ -53,7 +53,7 @@ VATsService.prototype.create = function (req, res, next) {
   .then(vat => {
     log.info('VATsService.create: create with Id '+ vat.id);
     res.header('Location', '/vats/' + vat.id);
-    res.send(201, Response.success(vat, "VAT creted with id: " + vat.id));
+    res.send(201, Response.success(vat, "VAT created with id: " + vat.id));
     return next ();
   })
   .catch(Sequelize.ValidationError, function (err) {

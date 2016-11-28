@@ -6,6 +6,7 @@ module.exports = function(server) {
     resource.health(req, res, next);
   });
 
+  require ('./calculations')(server);
   require ('./companies')(server);
   require ('./contacts')(server);
   require ('./resources')(server);
