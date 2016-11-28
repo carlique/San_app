@@ -60,7 +60,6 @@ VersionsService.prototype.create = function (req, res, next) {
       return res.send(404, Response.error(null, "Couldn't find calculation with id: " + req.params.calculationId));
     } else {
       Version.create({
-        number: req.params.number,
         desc: req.params.desc,
         CalculationId: calculation.id
       })

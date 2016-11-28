@@ -10,11 +10,11 @@ module.exports = function(sequelize, DataTypes) {
         notEmpty: true
       }
     },
-    CompanyId: DataTypes.INTEGER,
+    CalculationId: DataTypes.INTEGER,
     desc: DataTypes.TEXT,
     indexes: [{
         unique: true,
-        fields: ['number','CompanyId']
+        fields: ['number','CalculationId']
     }]
 
   });

@@ -64,21 +64,6 @@ describe('versions Service', () => {
   * Test the /POST route
   */
   describe('/POST version', () => {
-    it('it should not POST a version with an empty number', (done) => {
-      let version = {
-        number: "",
-        calculationId: 1
-      }
-      chai.request(server)
-        .post('/calculations/1/versions')
-        .send(version)
-        .end((err, res) => {
-            res.should.have.status(422);
-            res.body.should.be.a('object');
-            res.body.should.have.property('message').eql('Validation error');
-          done();
-        });
-    });
     it('it should POST a version ', (done) => {
       let version = {
         desc: "Some version of the calculation number 1"
@@ -97,7 +82,28 @@ describe('versions Service', () => {
         });
     });
 
-    it('it should not POST a version referenced to a non-existing calculation', (done) => {
+    it('it should POST another version with number increased by 1', (done) => {
+      let version = {
+        desc: "Some version of the calculation number 2"
+      }
+      Version.create({ desc: "", CalculationId: "1" })
+      .then((version1) => {
+        chai.request(server)
+          .post('/calculations/1/versions')
+          .send(version)
+          .end((err, res) => {
+              res.should.have.status(201);
+              res.should.have.header('Location','/calculations/1/versions/2');
+              res.body.should.be.a('object');
+              res.body.should.have.property('data').with.deep.property('number').eql(2);
+              res.body.should.have.property('data').with.deep.property('desc').eql('Some version of the calculation number 2');
+              res.body.should.have.property('data').with.deep.property('id').eql(2);
+            done();
+          });
+      });
+    });
+
+  it('it should not POST a version referenced to a non-existing calculation', (done) => {
       let version = {
         number: 1,
         desc: "Some version of the calculation number 999"
@@ -119,7 +125,7 @@ describe('versions Service', () => {
    */
   describe('/GET/:id version', () => {
     it('it should GET a version by the given id', (done) => {
-      Version.create({ desc: "", CompanyId: "1" })
+      Version.create({ desc: "", CalculationId: "1" })
       .then((version) => {
         chai.request(server)
           .get('/calculations/1/versions/' + version.id)
@@ -139,7 +145,7 @@ describe('versions Service', () => {
    */
   describe('/PUT/:id version', () => {
     it('it should UPDATE a version given the id', (done) => {
-      Version.build({ desc: "", CompanyId: "1" })
+      Version.build({ desc: "", CalculationId: "1" })
       .save()
       .then((version) => {
         chai.request(server)
