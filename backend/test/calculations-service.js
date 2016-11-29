@@ -297,25 +297,57 @@ describe('/calculations Resource', () => {
         });
       });
     });
+    it('it should not UPDATE a calculation with non-existing id', (done) => {
+      Calc.build({ name: "some Calc", number: "16/0001" })
+      .save()
+      .then((calculation) => {
+        chai.request(server)
+          .put('/calculations/999')
+          .send({ name: "some Calc", number: "16/0002" })
+          .end((err, res) => {
+              res.should.have.status(404);
+              res.body.should.be.a('object');
+              res.body.should.have.property('message').eql("Couldn't find calculation with id: 999");
+            done();
+          });
+      });
+    });
+
   });
 
   /*
    * Test the /DELETE/:id route
    */
   describe('/DELETE/:id calculation', () => {
-      it('it should DELETE a calculation given the id', (done) => {
-        Calc.build({ name: "some Calc", number: "16/0001" })
-        .save()
-        .then((calculation) => {
-                chai.request(server)
-                .delete('/calculations/' + calculation.id)
-                .end((err, res) => {
-                    res.should.have.status(200);
-                    res.body.should.be.a('object');
-                    res.body.should.have.property('message').eql('Calculation deleted with id: ' + calculation.id);
-                  done();
-                });
+    it('it should DELETE a calculation given the id', (done) => {
+      Calc.build({ name: "some Calc", number: "16/0001" })
+      .save()
+      .then((calculation) => {
+        chai.request(server)
+          .delete('/calculations/' + calculation.id)
+          .end((err, res) => {
+              res.should.have.status(200);
+              res.body.should.be.a('object');
+              res.body.should.have.property('message').eql('Calculation deleted with id: ' + calculation.id);
+            done();
           });
       });
+    });
+
+    it('it should not DELETE a calculation with non-existing id', (done) => {
+      Calc.build({ name: "some Calc", number: "16/0001" })
+      .save()
+      .then((calculation) => {
+        chai.request(server)
+          .delete('/calculations/999')
+          .end((err, res) => {
+              res.should.have.status(404);
+              res.body.should.be.a('object');
+              res.body.should.have.property('message').eql("Couldn't find calculation with id: 999");
+            done();
+          });
+      });
+    });
+
   });
 });
