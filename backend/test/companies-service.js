@@ -15,7 +15,7 @@ let Contact = models.Contact;
 
 chai.use(chaiHttp);
 
-describe('companies Service', () => {
+describe('/companies Resource', () => {
   beforeEach(function(done) {
     Company.sync({ force : true }) // drops table and re-creates it
       .then(function() {

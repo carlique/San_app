@@ -32,7 +32,7 @@ before(function(done) {
     });
 });
 
-describe('resources Service', () => {
+describe('/resources Resource', () => {
   beforeEach(function(done) {
     Resource.sync({ force : true }) // drops table and re-creates it
       .then(function() {

@@ -13,7 +13,7 @@ let Company = models.Company;
 
 chai.use(chaiHttp);
 
-describe('contacts Service', () => {
+describe('/contacts Resource', () => {
   beforeEach(function(done) {
     Contact.sync({ force : true }) // drops table and re-creates it
       .then(function() {
@@ -102,6 +102,7 @@ describe('contacts Service', () => {
           done();
         });
     });
+
     it('it should POST a contact ', (done) => {
       let contact = {
         firstName: "John",

@@ -14,7 +14,7 @@ let VAT = models.VAT;
 
 chai.use(chaiHttp);
 
-describe('VAT Service', () => {
+describe('/vats Resource', () => {
   beforeEach(function(done) {
     VAT.sync({ force : true }) // drops table and re-creates it
       .then(function() {

@@ -14,7 +14,7 @@ let Calculation = models.Calculation;
 chai.use(chaiHttp);
 
 
-describe('versions Service', () => {
+describe('/calculations/:calculationId/versions Resource', () => {
   beforeEach(function(done) {
    Calculation.sync({ force : true }) // drops table and re-creates it
       .then(function() {
@@ -138,6 +138,17 @@ describe('versions Service', () => {
           });
       });
     });
+
+    it('it should not GET a version referenced to a non-existing calculation', (done) => {
+        chai.request(server)
+          .get('/calculations/999/versions')
+          .end((err, res) => {
+              res.should.have.status(404);
+              res.body.should.be.a('object');
+              res.body.should.have.property('message').eql("Couldn't find calculation with id: 999");
+            done();
+          });
+      });
   });
 
   /*
@@ -160,25 +171,88 @@ describe('versions Service', () => {
         });
       });
     });
+
+    it('it should not UPDATE a version with non-existing id', (done) => {
+      Version.build({ desc: "", CalculationId: "1" })
+      .save()
+      .then((version) => {
+        chai.request(server)
+          .put('/calculations/1/versions/999')
+          .send(version)
+          .end((err, res) => {
+              res.should.have.status(404);
+              res.body.should.be.a('object');
+              res.body.should.have.property('message').eql("Couldn't find version with id: 999");
+            done();
+          });
+      });
+    });
+
+    it('it should not UPDATE a version referenced to a non-existing calculation', (done) => {
+      Version.build({ desc: "", CalculationId: "1" })
+      .save()
+      .then((version) => {
+        chai.request(server)
+          .put('/calculations/999/versions/' + version.id)
+          .send(version)
+          .end((err, res) => {
+              res.should.have.status(404);
+              res.body.should.be.a('object');
+              res.body.should.have.property('message').eql("Couldn't find calculation with id: 999");
+            done();
+          });
+      });
+    });
+
   });
 
   /*
    * Test the /DELETE/:id route
    */
   describe('/DELETE/:id version', () => {
-      it('it should DELETE a version given the id', (done) => {
-        Version.build({ desc: "", CompanyId: "1" })
-        .save()
-        .then((version) => {
-                chai.request(server)
-                .delete('/calculations/1/versions/' + version.id)
-                .end((err, res) => {
-                    res.should.have.status(200);
-                    res.body.should.be.a('object');
-                    res.body.should.have.property('message').eql('Version deleted with id: ' + version.id);
-                  done();
-                });
+    it('it should DELETE a version given the id', (done) => {
+      Version.build({ desc: "", CalculationId: "1" })
+      .save()
+      .then((version) => {
+        chai.request(server)
+          .delete('/calculations/1/versions/' + version.id)
+          .end((err, res) => {
+              res.should.have.status(200);
+              res.body.should.be.a('object');
+              res.body.should.have.property('message').eql('Version deleted with id: ' + version.id);
+            done();
           });
       });
+    });
+
+    it('it should not DELETE a version with non-existing id', (done) => {
+      Version.build({ desc: "", CalculationId: "1" })
+      .save()
+      .then((version) => {
+        chai.request(server)
+          .delete('/calculations/1/versions/999')
+          .end((err, res) => {
+              res.should.have.status(404);
+              res.body.should.be.a('object');
+              res.body.should.have.property('message').eql("Couldn't find version with id: 999");
+            done();
+          });
+      });
+    });
+
+    it('it should not DELETE a version referenced to a non-existing calculation', (done) => {
+      Version.build({ desc: "", CalculationId: "1" })
+      .save()
+      .then((version) => {
+        chai.request(server)
+          .delete('/calculations/999/versions/' + version.id)
+          .end((err, res) => {
+              res.should.have.status(404);
+              res.body.should.be.a('object');
+              res.body.should.have.property('message').eql("Couldn't find calculation with id: 999");
+            done();
+          });
+      });
+    });
   });
 });

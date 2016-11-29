@@ -17,7 +17,7 @@ let Version = models.Version;
 
 chai.use(chaiHttp);
 
-describe('calculations Service', () => {
+describe('/calculations Resource', () => {
   beforeEach(function(done) {
     Calc.sync({ force : true }) // drops table and re-creates it
       .then(function() {

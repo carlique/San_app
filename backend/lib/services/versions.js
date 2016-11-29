@@ -84,24 +84,31 @@ VersionsService.prototype.create = function (req, res, next) {
 };
 
 VersionsService.prototype.update = function (req, res, next) {
-  Version.findById(req.params.id).then(version => {
-    if (!version) {
-      log.info('VersionsService.update: id not found: '+ req.params.id);
-      res.send(404, Response.error(null, "Couldn't find version with id: " + req.params.id));
-      return next ();
-    }
-    else {
-      version.update({
-        desc: req.params.desc,
-      })
-      .then(version => {
-        log.info('VersionsService Id:' + version.id + ' updated');
-        res.send(200, Response.success(version, "Version updated with id: " + version.id));
-        return next ();
-      })
-      .catch(Sequelize.ValidationError, function (err) {
-        res.send(422, Response.error(null, "Validation error", err.errors));
-        return next ();
+  Calculation.findById(req.params.calculationId).then(calculation => {
+    if (!calculation) {
+      log.info('VersionsService.getAll: calculation with calculationId not found: '+ req.params.calculationId);
+      return res.send(404, Response.error(null, "Couldn't find calculation with id: " + req.params.calculationId));
+    } else {
+      Version.findById(req.params.id).then(version => {
+        if (!version) {
+          log.info('VersionsService.update: id not found: '+ req.params.id);
+          res.send(404, Response.error(null, "Couldn't find version with id: " + req.params.id));
+          return next();
+        }
+        else {
+          version.update({
+            desc: req.params.desc,
+          })
+          .then(version => {
+            log.info('VersionsService Id:' + version.id + ' updated');
+            res.send(200, Response.success(version, "Version updated with id: " + version.id));
+            return next ();
+          })
+          .catch(Sequelize.ValidationError, function (err) {
+            res.send(422, Response.error(null, "Validation error", err.errors));
+            return next ();
+          })
+        }
       })
     }
   })
@@ -113,19 +120,26 @@ VersionsService.prototype.update = function (req, res, next) {
 };
 
 VersionsService.prototype.destroy = function (req, res, next) {
-  Version.findById(req.params.id).then(version => {
-    if (!version) {
-      log.info('VersionsService.destroy: id not found: '+ req.params.id);
-      res.send(404, Response.error(null, "Couldn't find version with id: " + req.params.id));
-      return next ();
-    }
-    else {
-      version.destroy()
-      .then(function() {
-        log.info('VersionsService version with id: ' + req.params.id + ' deleted');
-        res.send(200, Response.success(null, "Version deleted with id: " + req.params.id));
-        return next ();
-      })
+  Calculation.findById(req.params.calculationId).then(calculation => {
+    if (!calculation) {
+      log.info('VersionsService.getAll: calculation with calculationId not found: '+ req.params.calculationId);
+      return res.send(404, Response.error(null, "Couldn't find calculation with id: " + req.params.calculationId));
+    } else {
+      Version.findById(req.params.id).then(version => {
+        if (!version) {
+          log.info('VersionsService.destroy: id not found: '+ req.params.id);
+          res.send(404, Response.error(null, "Couldn't find version with id: " + req.params.id));
+          return next ();
+        }
+        else {
+          version.destroy()
+          .then(function() {
+            log.info('VersionsService version with id: ' + req.params.id + ' deleted');
+            res.send(200, Response.success(null, "Version deleted with id: " + req.params.id));
+            return next ();
+          });
+        }
+      });
     }
   })
   .catch(err => {
