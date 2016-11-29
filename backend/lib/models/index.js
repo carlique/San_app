@@ -18,6 +18,7 @@ var models = [
   'Calculation',
   'Company',
   'Contact',
+  'Item',
   'Resource',
   'VAT',
   'Version',
@@ -34,8 +35,10 @@ models.forEach(function(model) {
   m.Calculation.hasMany(m.Version);
   m.Company.hasMany(m.Calculation);
   m.Company.hasMany(m.Contact);
+  m.Item.belongsTo(m.Version);
   m.Resource.belongsTo(m.VAT);
   m.Version.belongsTo(m.Calculation);
+  m.Version.hasMany(m.Item);
 })(module.exports);
 
 
@@ -50,7 +53,7 @@ models.forEach(function(model) {
 
   m.Version.beforeCreate( function(version, options) {
     return m.Version.max('number', {
-      where: { CompanyId: version.CompanyId }
+      where: { CalculationId: version.CalculationId }
     })
     .then(max => {
       if (isNaN(max)) max = 0;

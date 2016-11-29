@@ -1,8 +1,8 @@
 'use strict';
 
 module.exports = {
-  up: function (queryInterface, Sequelize, done) {
-    return queryInterface.createTable(
+  up: function (queryInterface, Sequelize) {
+    queryInterface.createTable(
       'Contacts',
       {
         id: {
@@ -15,7 +15,7 @@ module.exports = {
         firstName: Sequelize.STRING,
         lastName: Sequelize.STRING,
         title: Sequelize.STRING,
-        companyId: {
+        CompanyId: {
           type: Sequelize.INTEGER,
           references: { model: 'Companies', key: 'id' }
 
@@ -32,10 +32,11 @@ module.exports = {
         www: Sequelize.STRING,
         desc: Sequelize.TEXT
       }
-    );
+    ).done();
   },
 
   down: function (queryInterface, Sequelize) {
-    return queryInterface.dropTable('Contacts');
+    queryInterface.dropTable('Contacts')
+    .done();
   }
 };

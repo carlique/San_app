@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = {
-  up: function (queryInterface, Sequelize, done) {
+  up: function (queryInterface, Sequelize) {
     queryInterface.createTable(
       'Calculations',
       {
@@ -14,12 +14,12 @@ module.exports = {
         updatedAt: Sequelize.DATE,
         number: Sequelize.STRING,
         name: Sequelize.STRING,
-        companyId: {
+        CompanyId: {
           type: Sequelize.INTEGER,
           references: { model: 'Companies', key: 'id' }
 
         },
-        contactId: {
+        ContactId: {
           type: Sequelize.INTEGER,
           references: { model: 'Contacts', key: 'id' }
         },
@@ -44,7 +44,14 @@ module.exports = {
         technician: Sequelize.STRING,
         desc: Sequelize.TEXT
       }
-    ).done();
+    ).then(function () {
+      return queryInterface.addIndex(
+        'Calculations',
+        ['CompanyId'],
+        {
+          indexName: 'CompanyIds'
+        })
+    }).done();
   },
 
   down: function (queryInterface, Sequelize) {

@@ -3,7 +3,7 @@
 module.exports = {
   up: function (queryInterface, Sequelize) {
     return queryInterface.createTable(
-      'Versions',
+      'Items',
       {
         id: {
           type: Sequelize.INTEGER,
@@ -12,27 +12,30 @@ module.exports = {
         },
         createdAt: Sequelize.DATE,
         updatedAt: Sequelize.DATE,
-        number: Sequelize.INTEGER,
-        CalculationId: {
+        name: Sequelize.STRING,
+        amount: Sequelize.DECIMAL(10,2),
+        unit: Sequelize.STRING,
+        price: Sequelize.DECIMAL(10,2),
+        discount: Sequelize.DECIMAL(10,2),
+        vat: Sequelize.DECIMAL(10,2),
+        VersionId: {
           type: Sequelize.INTEGER,
-          references: { model: 'Companies', key: 'id' }
+          references: { model: 'Versions', key: 'id' }
         },
-        desc: Sequelize.TEXT
       }
     ).then(function () {
       return queryInterface.addIndex(
-        'Versions',
-        ['number'],
+        'Items',
+        ['VersionId'],
         {
-          indexName: 'uniqueNumber',
-          indicesType: 'UNIQUE'
+          indexName: 'versionIds'
         }
       );
     }).done();
   },
 
   down: function (queryInterface, Sequelize) {
-    return queryInterface.dropTable('Versions')
+    return queryInterface.dropTable('Items')
     .done();
   }
 };

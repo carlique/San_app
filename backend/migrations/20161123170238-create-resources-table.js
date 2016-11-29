@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = {
-  up: function (queryInterface, Sequelize, done) {
+  up: function (queryInterface, Sequelize) {
     queryInterface.createTable(
       'Resources',
       {

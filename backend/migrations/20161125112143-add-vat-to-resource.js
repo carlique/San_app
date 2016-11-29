@@ -6,10 +6,10 @@ module.exports = {
         type: Sequelize.INTEGER,
         references: { model: 'VATs', key: 'id' }
       }
-    );
+    ).done();
   },
   down: function (queryInterface, Sequelize) {
-    queryInterface.removeColumn('Resources', 'VATId');
-
+    queryInterface.removeColumn('Resources', 'VATId')
+    .done();
   }
 };
