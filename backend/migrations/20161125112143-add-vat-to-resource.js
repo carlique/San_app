@@ -8,7 +8,7 @@ module.exports = {
       }
     ).done();
   },
-  down: function (queryInterface, Sequelize) {
+  down: function (queryInterface) {
     queryInterface.removeColumn('Resources', 'VATId')
     .done();
   }

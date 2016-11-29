@@ -20,7 +20,6 @@ module.exports = {
           references: { model: 'Companies', key: 'id' }
 
         },
-        title: Sequelize.STRING,
         position: Sequelize.STRING,
         street: Sequelize.STRING,
         city: Sequelize.STRING,
@@ -35,7 +34,7 @@ module.exports = {
     ).done();
   },
 
-  down: function (queryInterface, Sequelize) {
+  down: function (queryInterface) {
     queryInterface.dropTable('Contacts')
     .done();
   }

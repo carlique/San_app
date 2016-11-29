@@ -25,13 +25,13 @@ ContactsService.prototype.getAll = function (req, res, next) {
         }
       }
     }).then(contacts => {
-    log.info('ContactsService.getAll returns: '+ contacts.length +' records');
+    req.log.info('ContactsService.getAll returns: '+ contacts.length +' records');
     res.send(200, Response.success(contacts, "Returned " + contacts.length + " records."));
     next (false);
   })
   .catch(err => {
     res.send(500, Response.fail(null, "Unexpected error", err));
-    log.error(err.stack);
+    req.log.error(err.stack);
     next(false);
   });
 };
@@ -39,17 +39,17 @@ ContactsService.prototype.getAll = function (req, res, next) {
 ContactsService.prototype.getById = function (req, res, next) {
   Contact.findById(req.params.id).then(contact => {
     if (!contact) {
-      log.info('ContactsService.getById: id not found: '+ req.params.id);
+      req.log.info('ContactsService.getById: id not found: '+ req.params.id);
       res.send(404, Response.error(null, "Couldn't find contact with id: " + req.params.id));
     } else {
-      log.info('ContactsService.getById: ' + JSON.stringify(contact));
+      req.log.info('ContactsService.getById: ' + JSON.stringify(contact));
       res.send(200, Response.success(contact,"Returned contact with id: " + req.params.id));
     }
     next (false);
   })
   .catch(err => {
     res.send(500, Response.fail(null, "Unexpected error", err));
-    log.error(err.stack);
+    req.log.error(err.stack);
     next(false);
   });
 }
@@ -72,7 +72,7 @@ ContactsService.prototype.create = function (req, res, next) {
     desc: req.params.desc
   })
   .then(contact => {
-    log.info('Contact created with Id '+ contact.id);
+    req.log.info('Contact created with Id '+ contact.id);
     res.header('Location', '/contacts/' + contact.id);
     res.send(201, Response.success(contact, "Contact created with id: " + contact.id));
     next(false);
@@ -83,7 +83,7 @@ ContactsService.prototype.create = function (req, res, next) {
   })
   .catch(err => {
     res.send(500, Response.fail(null, "Unexpected error", err));
-    log.error(err.stack);
+    req.log.error(err.stack);
     next(false);
   });
 };
@@ -91,7 +91,7 @@ ContactsService.prototype.create = function (req, res, next) {
 ContactsService.prototype.update = function (req, res, next) {
   Contact.findById(req.params.id).then(contact => {
     if (!contact) {
-      log.info('ContactsService.update: id not found: '+ req.params.id);
+      req.log.info('ContactsService.update: id not found: '+ req.params.id);
       res.send(404, Response.error(null, "Couldn't find contact with id: " + req.params.id));
       next(false);
     }
@@ -112,7 +112,7 @@ ContactsService.prototype.update = function (req, res, next) {
         desc: req.params.desc
       })
       .then(contact => {
-        log.info('ContactsService Id:' + contact.id + ' updated');
+        req.log.info('ContactsService Id:' + contact.id + ' updated');
         res.send(200, Response.success(contact, "Contact updated with id: " + contact.id));
         next(false);
       })
@@ -123,7 +123,7 @@ ContactsService.prototype.update = function (req, res, next) {
   })
   .catch(err => {
     res.send(500, Response.fail(null, "Unexpected error", err));
-    log.error(err.stack);
+    req.log.error(err.stack);
     next(false);
   });
 };
@@ -131,14 +131,14 @@ ContactsService.prototype.update = function (req, res, next) {
 ContactsService.prototype.destroy = function (req, res, next) {
   Contact.findById(req.params.id).then(contact => {
     if (!contact) {
-      log.info('ContactsService.destroy: id not found: '+ req.params.id);
+      req.log.info('ContactsService.destroy: id not found: '+ req.params.id);
       res.send(404, Response.error(null, "Couldn't find contact with id: " + req.params.id));
       next(false);
     }
     else {
       contact.destroy()
       .then(function() {
-        log.info('ContactsService contact with id: ' + req.params.id + ' deleted');
+        req.log.info('ContactsService contact with id: ' + req.params.id + ' deleted');
         res.send(200, Response.success(null, "Contact deleted with id: " + req.params.id));
         next(false);
       })
@@ -146,7 +146,7 @@ ContactsService.prototype.destroy = function (req, res, next) {
   })
   .catch(err => {
     res.send(500, Response.fail(null, "Unexpected error", err));
-    log.error(err.stack);
+    req.log.error(err.stack);
     next(false);
   });
 };

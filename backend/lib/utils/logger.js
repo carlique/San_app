@@ -1,3 +1,5 @@
+'use strict'
+
 var Logger = require('bunyan');
 
 var streams = [];
@@ -22,7 +24,7 @@ if (process.env.NODE_ENV === 'test') {
   ]
 }
 
-log = new Logger({
+var log = new Logger({
   name: 'SANapp-api',
   streams: streams
 });

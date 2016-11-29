@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = {
-  up: function (queryInterface, Sequelize) {
+  up: function (queryInterface) {
     return queryInterface.bulkInsert('VATs', [
         {
           name: 'Base VAT',
@@ -14,7 +14,7 @@ module.exports = {
       ], {})
   },
 
-  down: function (queryInterface, Sequelize) {
+  down: function (queryInterface) {
     return queryInterface.bulkDelete('VATs', null, {})
   }
 };

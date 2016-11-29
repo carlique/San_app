@@ -1,7 +1,5 @@
 'use strict';
 
-var info = require('./../../package.json');
-
 module.exports = Health;
 
 function Health () {

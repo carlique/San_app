@@ -32,13 +32,13 @@ ResourcesService.prototype.getAll = function (req, res, next) {
         model: VAT
       }]
     }).then(resources => {
-    log.info('ResourcesService.getAll returns: '+ resources.length +' records');
+    req.log.info('ResourcesService.getAll returns: '+ resources.length +' records');
     res.send(200, Response.success(resources, "Returned " + resources.length + " records."));
     return next ();
   })
   .catch(err => {
     res.send(500, Response.fail(null, "Unexpected error", err));
-    log.error(err.stack);
+    req.log.error(err.stack);
     return next (err);
   });
 };
@@ -49,17 +49,17 @@ ResourcesService.prototype.getById = function (req, res, next) {
     include: [{model: VAT}]
   }).then(resource => {
     if (!resource) {
-      log.info('ResourcesService.getById: id not found: '+ req.params.id);
+      req.log.info('ResourcesService.getById: id not found: '+ req.params.id);
       res.send(404, Response.error(null, "Couldn't find resource with id: " + req.params.id));
     } else {
-      log.info('ResourcesService.getById: ' + JSON.stringify(resource));
+      req.log.info('ResourcesService.getById: ' + JSON.stringify(resource));
       res.send(200, Response.success(resource,"Returned resource with id: " + req.params.id));
     }
     return next ();
   })
   .catch(err => {
     res.send(500, Response.fail(null, "Unexpected error", err));
-    log.error(err.stack);
+    req.log.error(err.stack);
     return next (err);
   });
 }
@@ -75,19 +75,19 @@ ResourcesService.prototype.create = function (req, res, next) {
     VATId: req.params.vatId
   })
   .then(resource => {
-    log.info('ResourcesService.create: create with Id '+ resource.id);
+    req.log.info('ResourcesService.create: create with Id '+ resource.id);
     res.header('Location', '/resources/' + resource.id);
     res.send(201, Response.success(resource, "Resource created with id: " + resource.id));
     return next ();
   })
   .catch(Sequelize.ValidationError, function (err) {
-    log.info('ResourcesService.create: validation error');
+    req.log.info('ResourcesService.create: validation error');
     res.send(422, Response.error(null, "Validation error", err.errors));
     return next ();
   })
   .catch(err => {
     res.send(500, Response.fail(null, "Unexpected error", err));
-    log.error(err.stack);
+    req.log.error(err.stack);
     return next ();
   });
 };
@@ -95,7 +95,7 @@ ResourcesService.prototype.create = function (req, res, next) {
 ResourcesService.prototype.update = function (req, res, next) {
   Resource.findById(req.params.id).then(resource => {
     if (!resource) {
-      log.info('ResourcesService.update: id not found: '+ req.params.id);
+      req.log.info('ResourcesService.update: id not found: '+ req.params.id);
       res.send(404, Response.error(null, "Couldn't find resource with id: " + req.params.id));
       return next ();
     }
@@ -110,7 +110,7 @@ ResourcesService.prototype.update = function (req, res, next) {
         VATId: req.params.vatId
       })
       .then(resource => {
-        log.info('ResourcesService Id:' + resource.id + ' updated');
+        req.log.info('ResourcesService Id:' + resource.id + ' updated');
         res.send(200, Response.success(resource, "Resource updated with id: " + resource.id));
         return next ();
       })
@@ -122,7 +122,7 @@ ResourcesService.prototype.update = function (req, res, next) {
   })
   .catch(err => {
     res.send(500, Response.fail(null, "Unexpected error", err));
-    log.error(err.stack);
+    req.log.error(err.stack);
     return next (err);
   });
 };
@@ -130,14 +130,14 @@ ResourcesService.prototype.update = function (req, res, next) {
 ResourcesService.prototype.destroy = function (req, res, next) {
   Resource.findById(req.params.id).then(resource => {
     if (!resource) {
-      log.info('ResourcesService.destroy: id not found: '+ req.params.id);
+      req.log.info('ResourcesService.destroy: id not found: '+ req.params.id);
       res.send(404, Response.error(null, "Couldn't find resource with id: " + req.params.id));
       return next ();
     }
     else {
       resource.destroy()
       .then(function() {
-        log.info('ResourcesService resource with id: ' + req.params.id + ' deleted');
+        req.log.info('ResourcesService resource with id: ' + req.params.id + ' deleted');
         res.send(200, Response.success(null, "Resource deleted with id: " + req.params.id));
         return next ();
       })
@@ -145,7 +145,7 @@ ResourcesService.prototype.destroy = function (req, res, next) {
   })
   .catch(err => {
     res.send(500, Response.fail(null, "Unexpected error", err));
-    log.error(err.stack);
+    req.log.error(err.stack);
     return next (err);
   });
 };

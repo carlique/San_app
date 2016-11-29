@@ -83,11 +83,8 @@ describe('/calculations/:calculationId/versions Resource', () => {
     });
 
     it('it should POST another version with number increased by 1', (done) => {
-      let version = {
-        desc: "Some version of the calculation number 2"
-      }
       Version.create({ desc: "", CalculationId: "1" })
-      .then((version1) => {
+      .then((version) => {
         chai.request(server)
           .post('/calculations/1/versions')
           .send(version)
@@ -226,9 +223,8 @@ describe('/calculations/:calculationId/versions Resource', () => {
     });
 
     it('it should not DELETE a version with non-existing id', (done) => {
-      Version.build({ desc: "", CalculationId: "1" })
-      .save()
-      .then((version) => {
+      Version.create({ desc: "", CalculationId: "1" })
+      .then(() => {
         chai.request(server)
           .delete('/calculations/1/versions/999')
           .end((err, res) => {
@@ -241,8 +237,7 @@ describe('/calculations/:calculationId/versions Resource', () => {
     });
 
     it('it should not DELETE a version referenced to a non-existing calculation', (done) => {
-      Version.build({ desc: "", CalculationId: "1" })
-      .save()
+      Version.create({ desc: "", CalculationId: "1" })
       .then((version) => {
         chai.request(server)
           .delete('/calculations/999/versions/' + version.id)

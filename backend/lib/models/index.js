@@ -1,6 +1,9 @@
 var Sequelize = require('sequelize');
 var dbconfig  = require('config').database;  // we use node-config to handle environments
 
+var Logger = require('../utils/logger');
+var log = new Logger().getSystemLogger();
+
 // initialize database connection
 var sequelize = new Sequelize(
   dbconfig.name,
@@ -51,7 +54,7 @@ models.forEach(function(model) {
     });
   });
 
-  m.Version.beforeCreate( function(version, options) {
+  m.Version.beforeCreate( function(version) {
     return m.Version.max('number', {
       where: { CalculationId: version.CalculationId }
     })

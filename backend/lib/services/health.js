@@ -1,4 +1,4 @@
-info = require('./../../package.json');
+var info = require('./../../package.json');
 
 module.exports =  Health;
 

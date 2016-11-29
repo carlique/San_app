@@ -1,5 +1,3 @@
-var fs = require('fs');
-
 module.exports = {
   name: "SAN App",
   port: 8080,

@@ -300,7 +300,7 @@ describe('/calculations Resource', () => {
     it('it should not UPDATE a calculation with non-existing id', (done) => {
       Calc.build({ name: "some Calc", number: "16/0001" })
       .save()
-      .then((calculation) => {
+      .then(function() {
         chai.request(server)
           .put('/calculations/999')
           .send({ name: "some Calc", number: "16/0002" })
@@ -337,7 +337,7 @@ describe('/calculations Resource', () => {
     it('it should not DELETE a calculation with non-existing id', (done) => {
       Calc.build({ name: "some Calc", number: "16/0001" })
       .save()
-      .then((calculation) => {
+      .then(function() {
         chai.request(server)
           .delete('/calculations/999')
           .end((err, res) => {

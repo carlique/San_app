@@ -31,7 +31,7 @@ module.exports = {
     }).done();
   },
 
-  down: function (queryInterface, Sequelize) {
+  down: function (queryInterface) {
     return queryInterface.dropTable('Versions')
     .done();
   }
