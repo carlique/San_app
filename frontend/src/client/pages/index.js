@@ -1,0 +1,7 @@
+export {default as MasterPage} from './MasterPage'
+export {default as IndexPage} from './IndexPage'
+export {default as LoginPage} from './LoginPage'
+export {default as CalculationsPage} from './CalculationsPage'
+export {default as ContactsPage} from './ContactsPage'
+// export RegistrationPage from './RegistrationPage'
+// export ProfilePage from './ProfilePage'
