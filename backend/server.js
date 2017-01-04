@@ -1,12 +1,12 @@
 'use strict';
 
 const restify = require('restify');
-const util    = require('util');
+//const util    = require('util');
 
 var config = require('config');
 
-const debug   = require('debug')('san_app:server');
-const error = require('debug')('san_app:error');
+//const debug   = require('debug')('san_app:server');
+//const error = require('debug')('san_app:error');
 
 var Logger = require('./lib/utils/logger');
 var logger = new Logger();
@@ -32,7 +32,7 @@ server.use(restify.bodyParser({
 require('./routes/index')(server);
 
 server.on('uncaughtException', function(req, res, route, err) {
-  var auditer = restify.auditLogger({log:log});
+  var auditer = restify.auditLogger({log: req.log});
   auditer(req, res, route, err);
   res.send(500, "Unexpected error occured");
 });
@@ -46,11 +46,12 @@ server.on('after', function(req, res, route, err) {
     //Skip auditor logging if its health request
     return;
   }
-  var auditer = restify.auditLogger({log:log});
+  var auditer = restify.auditLogger({log:req.log});
   auditer(req, res, route, err);
 });
 
 server.listen(port, process.env.REST_LISTEN ? process.env.REST_LISTEN : url, function() {
+  var log = logger.getSystemLogger();
   log.info(server.name +' listening at '+ server.url);
 });
 
