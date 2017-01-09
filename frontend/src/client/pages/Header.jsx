@@ -26,7 +26,9 @@ export default class Header extends React.Component {
             <NavItem eventKey={3} href="#">Fakturace</NavItem>
             <NavItem eventKey={4} href="#">Zařízení</NavItem>
             <NavDropdown eventKey={5} title="Nastavení" id="basic-nav-dropdown">
-              <MenuItem eventKey={5.1}>Skupiny</MenuItem>
+              <LinkContainer to={{ pathname: '/contacts' }}>
+                <MenuItem eventKey={5.1}>Kontakty</MenuItem>
+              </LinkContainer>
               <MenuItem eventKey={5.2}>Another action</MenuItem>
               <MenuItem eventKey={5.3}>Something else here</MenuItem>
               <MenuItem divider />
@@ -34,7 +36,6 @@ export default class Header extends React.Component {
             </NavDropdown>
           </Nav>
           <Nav pullRight>
-            <NavItem eventKey={1} href="#">Link Right</NavItem>
             <NotAuthenticated>
               <li><LoginLink /></li>
             </NotAuthenticated>

@@ -37,6 +37,7 @@
     "less-loader": "^2.2.3",
     "react": "^15.4.1",
     "react-bootstrap": "^0.30.7",
+    "react-bootstrap-typeahead": "^1.0.0-beta4",
     "react-document-title": "^2.0.2",
     "react-dom": "^15.4.1",
     "react-intl": "^2.2.2",
